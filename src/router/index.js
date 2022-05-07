@@ -1,9 +1,8 @@
-import store from '@/store'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 const routes = [
   {
-    path: '/login',
+    path: '/',
     name: 'login',
     component: () => import('../views/LoginView.vue')
   },
@@ -11,6 +10,12 @@ const routes = [
     path: '/singup',
     name: 'singup',
     component: ()=> import('../views/SingupView.vue')
+  },
+  {
+    path: '/posts',
+    name: 'posts',
+    component: ()=> import('../views/PostsView.vue'),
+    meta: {requireAuth: true}
   }
 ]
 
@@ -20,7 +25,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next)=>{
-  if(to.meta.requireAuth && !store.state.user.token){
+  if(to.meta.requireAuth && !localStorage.getItem("token")){
     next({name: 'login'});
   }
   else{

@@ -1,21 +1,22 @@
 <template>
-  <LoginVue/>
+  <Login/>
     
 </template>
 
 <script>
-import LoginVue from '@/components/login/Login.vue';
+import Login from '@/components/Login.vue';
 
 export default {
   name: 'aboutView',
   components: {
-    LoginVue
+    Login
   }
 }
 </script>
 
 <style lang="scss" module>
-  body{
-    width: 100%;
-  }
+body{
+  background-color: #0848875c;
+}
+  
 </style>

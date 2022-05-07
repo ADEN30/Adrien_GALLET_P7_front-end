@@ -1,20 +1,11 @@
-<script>
-export default {
-    components: {
-    }
-}
-</script>
-
-
-
-
 <template>
-<router-link to="/login" name="login"></router-link>
-<router-view/>
+  <router-view/>
 </template>
 
-
-<style lang="scss">
+<script>
+  
+</script>
+<style lang="scss" >
 *, ::before, ::after{
     margin: 0px;
     padding: 0px;

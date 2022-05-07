@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import SingupVue from '@/components/singup/Singup.vue';
+import SingupVue from '@/components/Singup.vue';
 
 export default {
   name: 'singupView',
@@ -16,6 +16,6 @@ export default {
 
 <style lang="scss" module>
   body{
-    width: 100%;
+    background-color: #0848875c;
   }
 </style>

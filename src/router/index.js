@@ -16,6 +16,12 @@ const routes = [
     name: 'posts',
     component: ()=> import('../views/PostsView.vue'),
     meta: {requireAuth: true}
+  },
+  {
+    path: '/modif',
+    name: 'modif',
+    component: ()=> import('../views/PostsView.vue'),
+    meta: {requireAuth: true}
   }
 ]
 

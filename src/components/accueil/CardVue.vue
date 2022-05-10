@@ -10,8 +10,19 @@ export default {
     name: "PostsVue",
     data(){
         return{
-            posts: []
+            posts: [],
+            postId: null,
+            comment:{
+                texte: "",
+                nbr: []
+            },
+            like:{
+              user: localStorage.getItem("like") 
+            }
+            
         }
+    },
+    computed:{
     },
     beforeCreate(){
         axios.defaults.headers.common['x-xsrf-token'] = localStorage.getItem("token");
@@ -26,70 +37,104 @@ export default {
                     post.push(data.data.publication_commenter[i])
                 }
                 if(post.length > 1){
-                    
-                    
-                    do{
-                        let index = 1;
-                        let date_1= post[0].date_post;
-                        let post_to_push = 0;
-                        while(index < post.lenght){
-                            let date_2 = post[index].date_post;
-                            date_1= date_1.replaceAll(":", "");
-                            date_1= date_1.replaceAll("T", "");
-                            date_1= date_1.replaceAll(".", "");
-                            date_1= date_1.replaceAll("Z", "");
-                            date_1= date_1.replaceAll("-", "");
-                            date_1 = parseInt(date_1);
-                            console.log(date_1);
-                            
-                            date_2= date_2.replaceAll(":", "");
-                            date_2= date_2.replaceAll("T", "");
-                            date_2= date_2.replaceAll(".", "");
-                            date_2= date_2.replaceAll("Z", "");
-                            date_2= date_2.replaceAll("-", "");
-                            date_2 = parseInt(date_2);
-                            console.log(date_2);
 
-                            if(date_1 > date_2){
-                                index++;
+                    do{
+                        let id_1= post[0].id_post;
+                        for(let i = 1; i< post.length; i++){
+
+                            if(id_1 > post[i].id_post){
+                                console.log(id_1);
                             }
-                            else if(date_1 < date_2){
-                                date_1 = date_2;
-                                post_to_push = index;
-                                index ++;
+                            else if(id_1 < post[i].id_post){
+                                id_1 = post[i].id_post;
                             }
-                            
                         }
-                        this.posts.push(post[post_to_push]);
-                        post.splice(post_to_push, 1);
+
+                        let index = post.indexOf(id_1);
+                        this.posts.push(post[id_1-1]);
+                        post.splice(index, 1);
                         
                     }while(post.length > 0);
                 }
-                this.posts.reverse();
-                console.log(this.posts);
-                
-                
             })
             .catch(err => console.log(err));
     },
     methods:{
-        commentaire(event){
+        create_commentaire(event, id_post){
             event.preventDefault();
+            
             axios.post("http://localhost:5000/api/posts/comment",{
-                post: 2,
-                comment: "Nouveau"
+                post: id_post,
+                comment: `${this.comment.texte}`
             }, {withCredentials: true})
-            .then(data => {alert(data.data.message);location.reload()})
+            .then(data => {
+                const reponse = data.data;
+                const post_comment = this.getOnepost(id_post);
+                let comment = {
+                comment: `${this.comment.texte}`,
+                ...reponse
+            };
+                post_comment.comment.push(comment)
+                this.postId = id_post;
+                this.comment.texte = "";
+            })
             .catch(err => {console.log(err);});
+        },
+        nb_commentaire(tableau, post){
+            if(tableau.length ==1){
+                return tableau;
+            }
+            else if(tableau.length > 1 && this.postId != post ){
+                this.comment.nbr = [tableau[0], tableau[1]];
+                return this.comment.nbr;
+            }
+            else if(tableau.length > 1 && this.postId == post){
+                return tableau;
+            }
+        },
+        create_like(valeur, post){
+            switch(valeur){
+                case 2:{
+                    axios.post("http://localhost:5000/api/posts/like", {post: post,like: valeur }, {withCredentials: true})
+                        .then(data => {
+                            const reponse = data.data;
+                            const post_liked = this.getOnepost(post);
+                            post_liked.nbLike_post = post_liked.nbLike_post + reponse.like;
+                            post_liked.nbDislike_post = post_liked.nbDislike_post + reponse.dislike;
+                        })
+                        .catch(err => console.log(err));
+                        break;
+                }
+                case 3:{
+                    axios.post("http://localhost:5000/api/posts/like", {post: post,like: valeur }, {withCredentials: true})
+                        .then(data => {
+                            const reponse = data.data;
+                            const post_liked = this.getOnepost(post);
+                            post_liked.nbLike_post = post_liked.nbLike_post + reponse.like;
+                            post_liked.nbDislike_post = post_liked.nbDislike_post + reponse.dislike;
+                        })
+                        .catch(err => console.log(err));
+                        break;
+                }
+            }
+        },
+        getOnepost(id){
+            for(let i = 0; i< this.posts.length; i++){
+                if(this.posts[i].id_post == id){
+                    return this.posts[i];
+                }
+            }
         }
+
     }
 }
 </script>
+
 <template>
 <div :class="$style.container">
     <div v-if="posts.length == 0"> Aucune publication</div>
 
-    <div v-for="post of posts" :key="post.id_post" :class="$style.card">
+    <div v-for="post of posts" :key="post.id_post" :id="'post_'+ post.id_post " :class="$style.card">
         <div v-if="!post.user_build" :class="$style.card_user">
             <img :src="post.picture_user" alt="">
             <h2 >{{post.firstname_user}} {{post.name_user}}</h2>
@@ -101,23 +146,22 @@ export default {
         <div>
             <img :src="post.picture_post" alt="" :class="$style.card_picture">
             <div>
-                <font-awesome-icon icon="heart"/>
-                <font-awesome-icon :icon="['far','heart']"/>
+                <button type="input" name="like" :id="'like_' + post.id_post" @click="create_like(2, post.id_post)"><font-awesome-icon icon="thumbs-up" />   {{post.nbLike_post}}</button>
+                <button type="input" name="dislike" :id="'dislike_' + post.id_post" @click="create_like(3, post.id_post)"><font-awesome-icon icon="thumbs-down" />    {{post.nbDislike_post}}</button>
             </div>
-            <div>
-                <font-awesome-icon icon="heart"/>
-                <font-awesome-icon :icon="['far','heart']"/>
-            </div>
-            
         </div>
         
         <div :class="$style.card_comment">
             <ul v-if="post.comment" :class="$style.card_comment_liste">
-                <li v-for="commentaire in post.comment" :key="commentaire" :class="$style.card_comment_liste_ligne"> <div :class="$style.card_comment_liste_ligne_user" ><img :src="commentaire.picture" alt=""> <p>{{commentaire.firstname}} {{commentaire.name}} </p></div> <p>{{commentaire.comment}}</p></li>
+                <li  v-for="commentaire in nb_commentaire(post.comment,post.id_post)"  :key="commentaire.id_user_post_comment" :class="$style.card_comment_liste_ligne" > <div :class="$style.card_comment_liste_ligne_user" ><img :src="commentaire.picture" alt=""> <p>{{commentaire.firstname}} {{commentaire.name}} </p></div> <p>{{commentaire.comment}}</p></li>
             </ul>
+            <div v-if="post.comment.length > 2" >
+                <p v-if="!this.postId || this.postId && post.id_post != this.postId" @click="this.postId= post.id_post">Voir plus...</p> 
+                <p v-else-if="this.postId != null && post.id_post == this.postId" @click="this.postId = null">Réduire...</p>
+            </div>
             <div :class="$style.card_comment_btn">
-                <input type="text" :class="$style.card_comment_btn_write" id="texte">
-                <a @click="commentaire($event)" :class="$style.card_comment_btn_send" :id="post.id_post">Publier</a>
+                <input type="text" :class="$style.card_comment_btn_write" id="texte" v-model="comment.texte">
+                <a @click="create_commentaire($event, post.id_post)" :class="$style.card_comment_btn_send" >Publier</a>
             </div>
         </div>
     </div>
@@ -142,6 +186,7 @@ export default {
 
     &_picture{
         max-width: 400px ;
+        object-fit: cover;
     }
 
     &_user{
@@ -155,6 +200,7 @@ export default {
             width: 50px;
             border-radius: 50%;
             border: 1px solid;
+            object-fit: cover;
         }
     }
 
@@ -189,6 +235,7 @@ export default {
                 img{
                     border-radius: 50%;
                     width: 40px;
+                    object-fit: cover;
                 }
             }
             

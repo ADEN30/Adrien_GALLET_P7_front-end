@@ -7,7 +7,7 @@
 import axios from "axios";
 
 export default {
-    name: "PostsVue",
+    name: "SingleVue",
     data(){
         return{
             posts: [],
@@ -24,52 +24,23 @@ export default {
                 display: false
             },
             user:{
-                userId: "", 
-                droit: 2,
-            },
-            nbr_post: 1
+                userId: ""
+            }
             
         }
     },
     computed:{
     },
     beforeCreate(){
-        axios.defaults.headers.common['x-xsrf-token'] = localStorage.getItem("token");
-            
-            axios.get('http://localhost:5000/api/posts', {
-            withCredentials: true})
-            .then(data =>{
-                let post = [];
-                this.user.userId = data.data.userId;
-                this.user.droit = data.data.droit;
-                for(let i = 0; i <data.data.post_no_comment.length; i++){
-                    post.push(data.data.post_no_comment[i]);
-                }
-                for(let i = 0; i <data.data.publication_commenter.length; i++){
-                    post.push(data.data.publication_commenter[i])
-                }
-                if(post.length > 1){
-
-                    do{
-                        let id_1= post[0].id_post;
-                        for(let i = 1; i< post.length; i++){
-
-                            if(id_1 > post[i].id_post){
-                                console.log(id_1);
-                            }
-                            else if(id_1 < post[i].id_post){
-                                id_1 = post[i].id_post;
-                            }
-                        }
-
-                        let index = post.indexOf(id_1);
-                        this.posts.push(post[id_1-1]);
-                        post.splice(index, 1);
-                        
-                    }while(post.length > 0);
-                }
-            })
-            .catch(err => console.log(err));
+        axios.defaults.headers.common['x-xsrf-token'] = localStorage.getItem("token");console.log(this.nbr_posts);
+        let id = this.$route.params.id;
+        axios.get('http://localhost:5000/api/posts/'+ id, {
+        withCredentials: true})
+        .then(data =>{
+            let reponse = data.data;
+            this.user.userId = reponse.userId;
+            this.posts.push(reponse.publication_commenter[0])
+        })
     },
     methods:{
         create_commentaire(event, id_post){
@@ -96,7 +67,7 @@ export default {
             if(tableau.length ==1){
                 return tableau;
             }
-            else if(tableau.length > 1  && !this.comment.display || this.comment.display && this.postId != post){
+            else if(tableau.length > 1  && !this.comment.display ){
                 this.comment.nbr = [tableau[0], tableau[1]];
                 return this.comment.nbr;
             }
@@ -148,7 +119,7 @@ export default {
 
     <div v-for="post of posts" :key="post.id_post" :id="'post_'+ post.id_post " :class="$style.card" >
         
-            <div :class="$style.card_tools" v-if="this.user.userId == post.userid_post || this.user.droit == 1">
+            <div :class="$style.card_tools" v-if="this.user.userId == post.userid_post">
             <div @click="this.tools.display = true; this.postId = post.id_post"><font-awesome-icon icon="ellipsis-vertical" :class="$style.card_tools_image"/></div>
             </div>
 
@@ -164,12 +135,12 @@ export default {
                 </div>
                 <div  :class="$style.card_user" v-else >
 
-                    <img :src="post.user_build.picture_user" alt="" > 
+                    <img :src="post.user_build.picture_user" alt="" >
                     <h2 >{{post.user_build.firstname_user}} {{post.user_build.name_user}}</h2>
                     
                 </div>
             <div>
-                <router-link :to="`/posts/${post.id_post}`"><img :src="post.picture_post" alt="" :class="$style.card_picture"></router-link>
+                <img :src="post.picture_post" alt="" :class="$style.card_picture">
                 <div>
                     <button type="input" name="like" :id="'like_' + post.id_post" @click="create_like(2, post.id_post)"><font-awesome-icon icon="thumbs-up" />   {{post.nbLike_post}}</button>
                     <button type="input" name="dislike" :id="'dislike_' + post.id_post" @click="create_like(3, post.id_post)"><font-awesome-icon icon="thumbs-down" />    {{post.nbDislike_post}}</button>
@@ -213,7 +184,7 @@ export default {
     box-shadow: 0px 0px 0px 1px #000000;
     padding: 10px 0px;
     z-index: 3;
-    width: 400px;
+    width: 700px;
     &_content{
         z-index: 1;
     }
@@ -288,12 +259,14 @@ export default {
         &_btn{
             display: flex;
             text-align: center;
+            align-items: center;
             border: 1px solid;
             border-radius: 20px;
-            height: 20px;
+            height: 40px;
             margin: 0px 5px;
             background-color: #909cc2;
             &_write{
+                height: 100%;
                 width: 90%;
                 border-radius: 20px 0px 0px 20px;
                 border: 0px;

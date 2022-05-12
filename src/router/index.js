@@ -18,9 +18,16 @@ const routes = [
     meta: {requireAuth: true}
   },
   {
-    path: '/modif',
+    path: '/posts/:id/modif',
     name: 'modif',
-    component: ()=> import('../views/PostsView.vue'),
+    component: ()=> import('../components/accueil/CardModif.vue'),
+    meta: {requireAuth: true}
+  }
+  ,
+  {
+    path: '/posts/:id',
+    name: 'one',
+    component: ()=> import('../views/SingleView.vue'),
     meta: {requireAuth: true}
   }
 ]

@@ -20,7 +20,7 @@ const routes = [
   {
     path: '/posts/:id/modif',
     name: 'modif',
-    component: ()=> import('../components/accueil/CardModif.vue'),
+    component: ()=> import('../views/CardModif.vue'),
     meta: {requireAuth: true}
   }
   ,
@@ -28,6 +28,18 @@ const routes = [
     path: '/posts/:id',
     name: 'one',
     component: ()=> import('../views/SingleView.vue'),
+    meta: {requireAuth: true}
+  },
+  {
+    path: '/posts/create',
+    name: 'create',
+    component: ()=> import('../views/CreateCardView.vue'),
+    meta: {requireAuth: true}
+  },
+  {
+    path: '/users/profile',
+    name: 'profile',
+    component: ()=> import('../views/ProfileView.vue'),
     meta: {requireAuth: true}
   }
 ]

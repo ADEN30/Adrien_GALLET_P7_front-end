@@ -18,9 +18,12 @@ export default {
 
 <style lang='scss' module>
 body{
-  background-color: white;
+  background-color: #0848875c;
   }
   .posts{
-    margin: auto;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
   }
 </style>

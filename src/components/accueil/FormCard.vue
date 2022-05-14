@@ -6,10 +6,10 @@
             <legend :class="$style.field_titre" v-else>Créé votre poste</legend>
 
             <label for="titre">Titre</label>
-            <input :class="$style.field_btn" type="text" name="titre" v-model="titre_create" :placeholder="titre" >
+            <input :class="$style.field_btn" type="text" name="titre" :value="this.titre" >
 
             <label for="name">Texte</label>
-            <input :class="$style.field_btn" type="text" name="texte" v-model="texte_create" :placeholder="texte" >
+            <input :class="$style.field_btn" type="text" name="texte" :value="this.texte" >
 
             <label for="picture">Image</label>
             <label for="picture" :class="$style.picture_profile" id="label_picture" required>{{namefile}}</label>
@@ -37,10 +37,11 @@ export default {
     },
     data(){
         return {
-            post_create: "",
-            titre_create: "",
-            texte_create: "",
-            picture_create: ""
+            post_create: this.post_id,
+            titre_create: this.titre,
+            texte_create: this.texte,
+            picture_create: this.picture,
+            file: false
         }
     },
     computed:{
@@ -62,54 +63,28 @@ export default {
             this.post_create = this.$route.params.id;
             console.log(document.getElementById('editPost'));
             let data;
-            console.log(this.picture_create);
-            if(!document.getElementById('picture').files[0]){
+            console.log(document.getElementsByName('titre')[0].value)
+            if(!this.file){
                 data ={
-                    titre: this.titre_create,
-                    texte: this.texte_create
+                    titre: document.getElementsByName('titre')[0].value,
+                    texte: document.getElementsByName('texte')[0].value
                 }
             }
             else{
                 data = new FormData();
                 console.log(this.titre_create)
-                data.append("post", `{"titre": "${this.titre}", "texte": "${this.texte_create}"}`);
+                data.append("post", `{"titre": "${document.getElementsByName('texte')[0].value}", "texte": "${document.getElementsByName('texte')[0].value}"}`);
                 data.append("image", document.getElementById('picture').files[0]);
             }
+            console.log(data)
             axios.put("http://localhost:5000/api/posts/"+ this.post_create, data,{withCredentials: true})
             .then(data => {
                 let reponse1 = data.data;
-                this.picture_create = reponse1.picture;
+                let picture = reponse1.picture;
                 this.$emit('update-post',{
-                    titre_create: this.titre_create,
-                    titre: this.picture,
-                    texte_create: this.texte_create,
-                    texte: this.texte,
-                    picture_create: this.picture_create,
-                    picture: this.picture,
-                    titre_update: function (){
-                        if(this.titre_create){
-                            return this.titre_create;
-                        }
-                        else{
-                            return this.titre
-                        }
-                    },
-                    texte_update: function (){
-                        if(this.texte_create){
-                            return this.texte_create;
-                        }
-                        else{
-                            return this.texte
-                        }
-                    },
-                    picture_update: function (){
-                        if(this.picture_create){
-                            return this.picture_create;
-                        }
-                        else{
-                            return this.picture
-                        }
-                    }
+                    titre_update: document.getElementsByName('titre')[0].value,
+                    texte_update: document.getElementsByName('texte')[0].value,
+                    picture_update: picture
                 });
                 
             })
@@ -141,6 +116,7 @@ export default {
             }
         },
         getpicture(){
+            this.file = true;
             let btn_picture = document.getElementById('picture');
             let label_picture = document.getElementById('label_picture');
             label_picture.innerText = btn_picture.files[0].name;

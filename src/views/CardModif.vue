@@ -23,9 +23,9 @@ export default {
     },
     methods:{
         update_data(payload){
-            this.titre = payload.titre_update();
-            this.texte = payload.texte_update();
-            this.picture = payload.picture_update();
+            this.titre = payload.titre_update;
+            this.texte = payload.texte_update;
+            this.picture = payload.picture_update;
         }
     },
     async beforeCreate(){

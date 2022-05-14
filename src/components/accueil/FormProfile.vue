@@ -53,10 +53,11 @@ export default {
             axios.put("http://localhost:5000/api/auth/user/profil", data, {withCredentials: true})
             .then(response => {
                 console.log(response)
-                let picture = response.data.picture
-                console.log(picture);
+                let donnee = response.data;
                 this.$emit('update-profile', {
-                    picture: picture
+                    titre_update: donnee.titre,
+                    texte_update: donnee.texte,
+                    picture_update: donnee.picture
                 })
                 
             })

@@ -73,7 +73,7 @@ export default {
             else{
                 data = new FormData();
                 console.log(this.titre_create)
-                data.append("post", `{"titre": "${document.getElementsByName('texte')[0].value}", "texte": "${document.getElementsByName('texte')[0].value}"}`);
+                data.append("post", `{"titre": "${document.getElementsByName('titre')[0].value}", "texte": "${document.getElementsByName('texte')[0].value}"}`);
                 data.append("image", document.getElementById('picture').files[0]);
             }
             console.log(data)

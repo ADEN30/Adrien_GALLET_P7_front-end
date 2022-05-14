@@ -1,6 +1,6 @@
 <template>
 <div :class="$style.box">
-    <FormProfile :class="$style.box_form" :actuel_email="this.email" :actuel_name="this.name" :actuel_firstname="this.firstname" :actuel_picture="this.picture" @update-profile="update_picture()" />
+    <FormProfile :class="$style.box_form" :actuel_email="this.email" :actuel_name="this.name" :actuel_firstname="this.firstname" :actuel_picture="this.picture" @update-profile="update_picture" />
         <img :class="$style.box_image" :src="this.picture" alt="">
         
     </div>

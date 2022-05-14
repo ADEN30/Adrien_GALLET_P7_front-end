@@ -54,15 +54,21 @@ export default {
             .then(response => {
                 console.log(response)
                 let picture = response.data.picture
+                console.log(picture);
                 this.$emit('update-profile', {
-                    picture
+                    picture: picture
                 })
                 
             })
             .catch(err => console.log(err)); 
                 
+        },
+        getpicture(){
+            let btn_picture = document.getElementById('picture');
+            let label_picture = document.getElementById('label_picture');
+            label_picture.innerText = btn_picture.files[0].name;
         }
-    },
+    }
 }
 
 
@@ -87,7 +93,7 @@ export default {
         
             <label for="picture">Photo de profile</label>
             <label for="picture" :class="$style.picture_profile" id="label_picture">{{namefile}}</label>
-            <input :class="$style.field_btn_picture" type="file" id="picture" name="image" required="true" @change="this.file = true"> 
+            <input :class="$style.field_btn_picture" type="file" id="picture" name="image" required="true" @change="this.file= true; getpicture() "> 
             
             <input :class="$style.field_send" type="submit" value="Mettre à jour" @click="update($event)">
             

@@ -33,7 +33,7 @@ export default {
     },
     methods:{
         update_picture(payload){
-            this.picture = payload.picture;
+            this.picture = payload.picture_update;
         }
     }
 }

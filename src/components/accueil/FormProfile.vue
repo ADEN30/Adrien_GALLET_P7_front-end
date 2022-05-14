@@ -55,8 +55,6 @@ export default {
                 console.log(response)
                 let donnee = response.data;
                 this.$emit('update-profile', {
-                    titre_update: donnee.titre,
-                    texte_update: donnee.texte,
                     picture_update: donnee.picture
                 })
                 

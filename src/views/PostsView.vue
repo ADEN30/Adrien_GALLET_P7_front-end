@@ -1,10 +1,12 @@
 <script>
 import PostsVue from '../components/accueil/CardVue.vue'
+import NavBar from '../components/accueil/NavBar.vue';
 
 export default {
     name: 'PostsView',
     components: {
-        PostsVue
+        PostsVue,
+        NavBar
     }
 }
 </script>
@@ -12,18 +14,17 @@ export default {
 
 
 <template>
-   <PostsVue :class="$style.posts"/>
+  <NavBar :class="$style.nav" />
+  <PostsVue :class="$style.posts"/>
 </template>
 
 
 <style lang='scss' module>
-body{
-  background-color: #0848875c;
-  }
-  .posts{
-    position: absolute;
-    top: 30%;
-    left: 50%;
-    transform: translateX(-50%);
-  }
+
+.posts{
+  position: relative;
+  top: 20px;
+  left: 45%;
+  transform: translateX(-50%);
+}
 </style>

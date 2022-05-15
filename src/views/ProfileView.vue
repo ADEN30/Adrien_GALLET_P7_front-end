@@ -1,14 +1,15 @@
 <template>
+<NavBar/>
 <div :class="$style.box">
+    <img :class="$style.box_image" :src="this.picture" alt="">
     <FormProfile :class="$style.box_form" :actuel_email="this.email" :actuel_name="this.name" :actuel_firstname="this.firstname" :actuel_picture="this.picture" @update-profile="update_picture" />
-        <img :class="$style.box_image" :src="this.picture" alt="">
-        
     </div>
 </template>
 
 <script>
 import axios from 'axios'
 import FormProfile from '../components/accueil/FormProfile.vue'
+import NavBar from '../components/accueil/NavBar.vue';
 export default {
     name: 'profileView',
     data(){
@@ -20,7 +21,8 @@ export default {
         }
     },
     components:{
-        FormProfile
+        FormProfile,
+        NavBar
     },
     async beforeCreate(){
         const reponse = await axios.get(`http://localhost:5000/api/auth/user/profil`, {withCredentials: true});
@@ -41,16 +43,18 @@ export default {
 
 <style lang="scss" module>
 .box{
-    position: absolute;
-    top: 50%;
+    position: relative;
     left: 50%;
-    transform: translate(-50%, -50%);
-
+    transform: translateX(-30%);
     &_image{
         position: relative;
-        transform: translate(-100%, -60%);
+        top: 250px;
+        left: 20px;
         width: 200px;
+        height: 200px;
+        object-fit: cover;
         border-radius: 50%;
+        z-index: 2;
     }
 }
 </style>

@@ -142,6 +142,8 @@ export default {
                             const post_liked = this.getOnepost(post);
                             post_liked.nbLike_post = post_liked.nbLike_post + reponse.like;
                             post_liked.nbDislike_post = post_liked.nbDislike_post + reponse.dislike;
+                            
+                            
                         })
                         .catch(err => console.log(err));
                         break;
@@ -157,21 +159,42 @@ export default {
         },
         async delete_comment(id_comment, index, post){
             console.log(post);
-            const reponse = axios.delete("http://localhost:5000/api/posts/comment",{data:{post, id_comment},withCredentials: true});
+            const reponse = await axios.delete("http://localhost:5000/api/posts/comment",{data:{post, id_comment},withCredentials: true});
              if(reponse){
                  let post_comment = this.getOnepost(post);
-                 console.log(post_comment);
                  post_comment.comment.splice(index,1);
              }
 
         },
         async delete_post(index, post){
-            console.log(post);
-            const reponse = axios.delete("http://localhost:5000/api/posts/",{data:{post},withCredentials: true});
+            const reponse = await axios.delete("http://localhost:5000/api/posts/",{data:{post},withCredentials: true});
              if(reponse){
                  this.posts.splice(index,1);
              }
 
+        },
+        display_user(id_user, id_post){
+            if(id_user == this.user.userId && this.postId == id_post){
+                console.log(id_post);
+                return true;
+            }
+            else{
+                let user = document.getElementById(`user_${id_post}`);
+                user.style.bottom = "5px;"
+                return false;
+            }
+        },
+        style_user(id_user, id_post){
+            if(id_user != this.user.userId){
+                let profile = document.getElementById(`user_${id_post}`);
+                let content = document.getElementById(`content_${id_post}`);
+                if(profile){
+                    profile.style.bottom = '5px'
+                    content.style.marginTop = '10px'
+                    
+                } 
+            }
+            return true;
         }
 
     }
@@ -184,7 +207,7 @@ export default {
 
     <div v-for="(post, numeros) of posts" :key="post.id_post" :id="'post_'+ post.id_post " :class="$style.card" >
         
-            <div :class="$style.card_tools" v-if="this.user.userId == post.userid_post || this.user.droit == 1">
+            <div :class="$style.card_tools" v-if="post.userid_post == this.user.userId && post.id_post || this.user.droit == 1" >
             <div @click="this.tools.display = true; this.postId = post.id_post"><font-awesome-icon icon="ellipsis-vertical" :class="$style.card_tools_image"/></div>
             </div>
 
@@ -193,9 +216,9 @@ export default {
                     <div @click="delete_post( numeros, post.id_post)"><font-awesome-icon icon="trash" :class="$style.card_tool_modif_delete_image"/> Supprimer</div>
             </div>
 
-            <div :class="$style.card_content" @click="this.tools.display = false">
+            <div :class="$style.card_content" @click="this.tools.display = false"  >
 
-                <div  :class="$style.card_user" >
+                <div  :class="$style.card_user" :id="'user_'+ post.id_post" v-if="style_user(post.userid_post, post.id_post)">
 
                     <img :src="post.user_build.picture_user" alt="" > 
                     <h2 >{{post.user_build.firstname_user}} {{post.user_build.name_user}}</h2>
@@ -204,14 +227,14 @@ export default {
 
             <div>
 
-                <div :class="$style.card_content_post">
-                    <h3 v-if="post.titre_post != ''"> {{post.titre_post}}</h3>
-                    <p v-if="post.text_post != ''"> {{post.text_post}}</p>
+                <div :class="$style.card_content_post" :id="'content_'+ post.id_post">
+                    <h3 :class="$style.card_content_post_titre"  v-if="post.titre_post != ''"> {{post.titre_post}}</h3>
+                    <p :class="$style.card_content_post_texte" v-if="post.text_post != ''"> {{post.text_post}}</p>
                 </div> 
                 <router-link :to="`/posts/${post.id_post}`"><img :src="post.picture_post" alt="" :class="$style.card_picture"></router-link>
-                <div>
-                    <button type="input" name="like" :id="'like_' + post.id_post" @click="create_like(2, post.id_post)"><font-awesome-icon icon="thumbs-up" />   {{post.nbLike_post}}</button>
-                    <button type="input" name="dislike" :id="'dislike_' + post.id_post" @click="create_like(3, post.id_post)"><font-awesome-icon icon="thumbs-down" />    {{post.nbDislike_post}}</button>
+                <div :class="$style.card_emoji">
+                    <button :class="$style.card_emoji_like" type="input" name="like" :id="'like_' + post.id_post" @click="create_like(2, post.id_post)"><font-awesome-icon icon="thumbs-up" />   {{post.nbLike_post}}</button>
+                    <button :class="$style.card_emoji_dislike" type="input" name="dislike" :id="'dislike_' + post.id_post" @click="create_like(3, post.id_post)"><font-awesome-icon icon="thumbs-down" />    {{post.nbDislike_post}}</button>
                 </div>
 
             </div>
@@ -252,24 +275,31 @@ export default {
 
 .card{
     border-radius: 3%;
-    background: linear-gradient(#909cc27e, #e54b4b7d );
-    box-shadow: 0px 0px 0px 1px #000000;
+    background: linear-gradient(#f4f4f4, #e54b4b );
+    box-shadow: 5px 6px 10px 0px #000000;
     padding: 10px 0px;
     z-index: 3;
-    width: 400px;
+    width: 500px;
 
     &_content{
         z-index: 1;
 
         &_post{
-            text-align: center;
+            text-align: left;
             margin-bottom: 5%;
+            display: flex;
+            flex-direction: column;
+            row-gap: 30px;
+            padding-left: 20px;
 
             &_titre{
-                text-align: left;
+                width: 250px;
+                word-wrap: break-word;
             }
 
             &_texte{
+                word-wrap: break-word;
+                width: 90%;
 
             }
 
@@ -301,6 +331,36 @@ export default {
         }
     }
 
+    &_emoji{
+
+        display: flex;
+        column-gap: 20px;
+        position: relative;
+        left: 20px;
+        width: min-content;
+
+        &_like{
+            display: flex;
+            column-gap: 7px;
+            font-size: 20px;
+            background-color: white;
+            border: 0px;
+            padding: 4px 5px;
+            border-radius: 50px;
+        }
+        &_dislike{
+            display: flex;
+            align-items: center;
+            column-gap: 7px;
+            font-size: 20px;
+            background-color: white;
+            border: 0px;
+            padding: 4px 5px;
+            border-radius: 50px;
+        }
+
+    }
+
     &_comment{
         width: 100%;
 
@@ -310,6 +370,7 @@ export default {
             flex-direction: column;
             
             &_ligne{
+
                 display: flex;
                 flex-direction: column ;
                 margin-bottom: 10px;
@@ -319,6 +380,7 @@ export default {
                 height: min-content;
                 padding: 5px;
                 border-radius: 15px;
+
                 &_user{
                     display: flex;
                     align-items: center;
@@ -391,6 +453,8 @@ export default {
    left: 95%;
    font-size: 30px;
    z-index: 3;
+   width: min-content;
+   cursor: pointer;
 
    &_modif_delete{
        display: flex;
@@ -400,6 +464,7 @@ export default {
         bottom: 30px;
         font-size: 15px;
         z-index: 4;
+        cursor: pointer;
 
         &_image{
             

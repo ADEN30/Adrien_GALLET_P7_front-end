@@ -1,9 +1,11 @@
 <template>
+    <NavBar/>
     <form-card :post_id="this.post" :titre="this.titre" :texte="this.texte" :picture="this.picture" @update-post="update_data"/>
     <card-modif :picture="this.picture" :titre="this.titre" :texte="this.texte"/>
 </template>
 
 <script>
+import NavBar from '../components/accueil/NavBar.vue';
 import FormCard from '../components/accueil/FormCard.vue';
 import CardModif from '../components/accueil/CardModif.vue';
 import axios from 'axios';
@@ -11,7 +13,8 @@ export default {
     name: "FormulaireModif",
     components:{
         FormCard,
-        CardModif
+        CardModif,
+        NavBar
     },
     data(){
         return{
@@ -54,7 +57,5 @@ export default {
 </script>
 
 <style lang="scss" module>
-body{
-    background-color: #0848875c;
-}
+
 </style>

@@ -82,7 +82,7 @@ export default {
             <legend :class="$style.field_titre">Profile</legend>
 
             <label for="email">Email</label>
-            <input :class="$style.field_btn" type="email" name="email" :value="this.actuel_email" >
+            <input :class="$style.field_btn" type="email" name="email" pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" :value="this.actuel_email" >
 
             <label for="name">Nom</label>
             <input :class="$style.field_btn" type="text" name="name" required="true" :value="this.actuel_name" >
@@ -112,11 +112,7 @@ export default {
     flex-direction: column;
     align-items: center;
     row-gap: 20px;
-    position: absolute;
     width: 700px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     background: linear-gradient(#909cc2, #e54b4b );
     padding: 20px 0px;
 
@@ -153,7 +149,7 @@ export default {
         color: black;
         margin-bottom: 20px;
         min-width: 200px;
-        max-width: 200px;
+        max-width: 250px;
         height: 35px;
         padding: 10px;
         border: 0px;
@@ -183,7 +179,7 @@ export default {
 
     &_btn{
         margin-bottom: 20px;
-        width: 200px;
+        width: 250px;
         height: 35px;
         padding: 10px;
         border: 0px;

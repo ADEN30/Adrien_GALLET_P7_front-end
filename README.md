@@ -4,21 +4,18 @@
 ```
 npm install
 ```
+### Configurer le Port 
+Allez dans package json.js puis configurer le script serve de la manière suivante :
+```
+"serve": "vue-cli-service serve --port 8080"
+```
+Commande: 
 
-### Compiles and hot-reloads for development
+### Compiler et build
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Lien qui ma permis d'effectuer le stockage du token coté client
 ```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+https://www.codeheroes.fr/2020/06/20/securiser-une-api-rest-3-3-gestion-du-jwt-cote-client/

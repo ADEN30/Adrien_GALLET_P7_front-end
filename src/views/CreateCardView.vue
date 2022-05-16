@@ -1,6 +1,6 @@
 <template>
-    <NavBar/>
-    <form-card/>
+    <NavBar />
+    <FormCard :class="$style.post"/>
 </template>
 
 <script>
@@ -17,4 +17,10 @@ export default {
 
 <style lang="scss" module>
 
+.post{
+    position: relative;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+}
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <Login/>
+  <Login :class="$style.login"/>
     
 </template>
 
@@ -16,5 +16,10 @@ export default {
 
 <style lang="scss" module>
 
+.login{
+  position: relative;
+  top: 100px;
+  left: 50%;
+}
   
 </style>

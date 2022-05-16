@@ -1,7 +1,7 @@
 <template>
     <NavBar/>
-    <form-card :post_id="this.post" :titre="this.titre" :texte="this.texte" :picture="this.picture" @update-post="update_data"/>
-    <card-modif :picture="this.picture" :titre="this.titre" :texte="this.texte"/>
+    <form-card :class="$style.form" :post_id="this.post" :titre="this.titre" :texte="this.texte" :picture="this.picture" @update-post="update_data"/>
+    <card-modif :class="$style.post" :picture="this.picture" :titre="this.titre" :texte="this.texte"/>
 </template>
 
 <script>
@@ -57,5 +57,18 @@ export default {
 </script>
 
 <style lang="scss" module>
-
+.form{
+    position: relative;
+    transform: translateX(-50%);
+    left: 50%;
+    top: 40px;
+}
+.post{
+    position: relative;
+    width: min-content;
+    left: 50%;
+    top: 100px;
+    transform: translateX(-50%);
+    padding-bottom: 30px;
+}
 </style>

@@ -115,14 +115,6 @@ export default {
     width: 700px;
     background: linear-gradient(#909cc2, #e54b4b );
     padding: 20px 0px;
-
-    &_login{
-        font-size: 18px;
-
-        &:hover{
-            color: #084887;
-        }
-    }
 }
 
 .form{

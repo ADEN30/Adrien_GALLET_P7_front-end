@@ -79,7 +79,7 @@ export default {
             
         </fieldset>
     </form>
-    <router-link :class="$style.div_login" to="login"> Connectez-vous</router-link>
+    <router-link :class="$style.div_login" to="/"> Connectez-vous </router-link>
     <router-view/>
 </div>
 </template>

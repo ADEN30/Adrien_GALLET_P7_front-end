@@ -133,11 +133,7 @@ export default {
     flex-direction: column;
     align-items: center;
     row-gap: 20px;
-    position: absolute;
     width: 500px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     background: linear-gradient(#909cc2, #e54b4b );
     padding: 20px 0px;
 

@@ -310,6 +310,7 @@ export default {
 
     &_picture{
         width: 100%;
+        height: 300px;
         object-fit: cover;
     }
 

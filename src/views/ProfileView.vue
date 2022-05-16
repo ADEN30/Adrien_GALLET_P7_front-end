@@ -45,7 +45,8 @@ export default {
 .box{
     position: relative;
     left: 50%;
-    transform: translateX(-30%);
+    transform: translateX(-50%);
+    width: min-content;
     &_image{
         position: relative;
         top: 250px;

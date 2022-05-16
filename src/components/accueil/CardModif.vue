@@ -72,12 +72,7 @@ export default {
 
 <style lang="scss" module>
 
-.container{
-    position: absolute;
-    top: 80%;
-    left: 50%;
-    transform: translate(-50%, 0%);
-}
+
 
 .card{
     border-radius: 3%;
@@ -92,6 +87,7 @@ export default {
 
     &_picture{
         width: 100%;
+        height: 300px;
         object-fit: cover;
     }
 
@@ -190,6 +186,7 @@ export default {
    left: 95%;
    font-size: 30px;
    z-index: 3;
+   width: min-content;
 
    &_modif_delete{
        display: flex;

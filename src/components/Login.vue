@@ -23,10 +23,11 @@ export default {
         send(event){
             event.preventDefault();
                 axios.post("http://localhost:5000/api/auth/login", {
-                    email: this.email,
-                    password: this.password
-                },{
-                    withCredentials: true
+                        email: this.email,
+                        password: this.password,},
+                        {
+                        withCredentials: true
+                    
                 })
                 .then(response => {
                     const token = response.data.xsrfToken;

@@ -8,7 +8,7 @@
             <label for="titre">Titre</label>
             <input :class="$style.field_btn" type="text" name="titre" :value="this.titre" >
 
-            <label for="name">Texte</label>
+            <label for="texte">Texte</label>
             <input :class="$style.field_btn" type="text" name="texte" :value="this.texte" >
 
             <label for="picture">Image</label>
@@ -61,9 +61,7 @@ export default {
         update(event){
             event.preventDefault();
             this.post_create = this.$route.params.id;
-            console.log(document.getElementById('editPost'));
             let data;
-            console.log(document.getElementsByName('titre')[0].value)
             if(!this.file){
                 data ={
                     titre: document.getElementsByName('titre')[0].value,
@@ -72,7 +70,7 @@ export default {
             }
             else{
                 data = new FormData();
-                console.log(this.titre_create)
+                console.log(document.getElementsByName('titre')[0])
                 data.append("post", `{"titre": "${document.getElementsByName('titre')[0].value}", "texte": "${document.getElementsByName('texte')[0].value}"}`);
                 data.append("image", document.getElementById('picture').files[0]);
             }
@@ -96,13 +94,13 @@ export default {
             let data;
             if(document.getElementById('picture').files[0]){
                 data ={
-                    titre: this.titre_create,
-                    texte: this.texte_create
+                    titre: document.getElementsByName('titre')[0].value,
+                    texte: document.getElementsByName('texte')[0].value
                 }
             
                 data = new FormData();
                 console.log(this.titre_create)
-                data.append("post", `{"titre": "${this.titre_create}", "texte": "${this.texte_create}"}`);
+                data.append("post", `{"titre": "${document.getElementsByName('titre')[0].value}", "texte": "${document.getElementsByName('texte')[0].value}"}`);
                 data.append("image", document.getElementById('picture').files[0]);
                 axios.post("http://localhost:5000/api/posts/", data,{withCredentials: true})
                 .then(() => {

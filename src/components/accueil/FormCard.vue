@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axiosCLI from '../../axios/index'
 export default {
     name: "FormCard",
     props:{
@@ -75,7 +75,7 @@ export default {
                 data.append("image", document.getElementById('picture').files[0]);
             }
             console.log(data)
-            axios.put("http://localhost:5000/api/posts/"+ this.post_create, data,{withCredentials: true})
+            axiosCLI.put("/posts/"+ this.post_create, data)
             .then(data => {
                 let reponse1 = data.data;
                 let picture = reponse1.picture;
@@ -102,7 +102,7 @@ export default {
                 console.log(this.titre_create)
                 data.append("post", `{"titre": "${document.getElementsByName('titre')[0].value}", "texte": "${document.getElementsByName('texte')[0].value}"}`);
                 data.append("image", document.getElementById('picture').files[0]);
-                axios.post("http://localhost:5000/api/posts/", data,{withCredentials: true})
+                axiosCLI.post("/posts", data)
                 .then(() => {
                     alert("Post créé");
                     this.$router.replace({path: "/posts"});

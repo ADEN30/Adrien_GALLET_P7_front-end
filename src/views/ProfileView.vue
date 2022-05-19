@@ -8,7 +8,7 @@
             <input type="text" name="user" required :class="$style.delete_texte_btn">
         </div>
         
-        <input type="input" name="delete" value="Supprimer le compte" @click="delete_accunt" :class="$style.delete_btn">
+        <input type="submit" name="delete" value="Supprimer le compte" @click="delete_accunt($event)" :class="$style.delete_btn">
     </div>
     
     <FormProfile :class="$style.box_form" :actuel_email="this.email" :actuel_name="this.name" :actuel_firstname="this.firstname" :actuel_picture="this.picture" @update-profile="update_picture" />
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axiosCLI from '../axios/index'
 import FormProfile from '../components/accueil/FormProfile.vue'
 import NavBar from '../components/accueil/NavBar.vue';
 export default {
@@ -35,7 +35,7 @@ export default {
         NavBar
     },
     async beforeCreate(){
-        const reponse = await axios.get(`http://localhost:5000/api/auth/user/profil`, {withCredentials: true});
+        const reponse = await axiosCLI.get(`/auth/user/profil`);
         const donnee = reponse.data;
         console.log(donnee)
         this.email = donnee.email_user;
@@ -48,13 +48,22 @@ export default {
         update_picture(payload){
             this.picture = payload.picture_update;
         },
-       delete_accunt(){
-            const rep = axios.delete(`http://localhost:5000/api/auth/user/profil`, { data:{ user: document.getElementsByName('user')[0].value},withCredentials: true});
+       delete_accunt(event){
+           event.preventDefault();
+           let user;
+           if(this.droit == 1){
+               user = document.getElementsByName('user')[0].value;
+           }
+           else{
+               user = 0;
+           }
+            const rep = axiosCLI.delete(`/auth/user/profil`, { data:{ user},withCredentials: true});
             if(rep){
                 if(this.droit == 2){
+                    
                     this.$router.replace({path: '/'});
                 }
-                alert("Compte supprimé");
+                alert("Compte supprimé")
             }
             else{
                 alert("Impossible de supprimé le compte")

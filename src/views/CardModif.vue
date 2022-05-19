@@ -8,7 +8,7 @@
 import NavBar from '../components/accueil/NavBar.vue';
 import FormCard from '../components/accueil/FormCard.vue';
 import CardModif from '../components/accueil/CardModif.vue';
-import axios from 'axios';
+import axiosCLI from '../axios/index';
 export default {
     name: "FormulaireModif",
     components:{
@@ -34,7 +34,7 @@ export default {
     async beforeCreate(){
         let id = this.$route.params.id;
         
-        const reponse  = await axios.get(`http://localhost:5000/api/posts/${id}`, {withCredentials: true});
+        const reponse  = await axiosCLI.get(`/posts/${id}`);
         let donnee = reponse.data;
         if(donnee.publication_commenter.length >0){
             donnee = donnee.publication_commenter[0];

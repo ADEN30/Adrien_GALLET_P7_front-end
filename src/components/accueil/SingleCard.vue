@@ -4,7 +4,7 @@
 
 
 <script>
-import axios from "axios";
+import axiosCLI from "../../axios/index";
 
 export default {
     name: "SingleVue",
@@ -32,11 +32,9 @@ export default {
     computed:{
     },
     beforeCreate(){
-        axios.defaults.headers.common['x-xsrf-token'] = localStorage.getItem("token");
         let id = this.$route.params.id;
         this.postId = id;
-        axios.get('http://localhost:5000/api/posts/'+ id, {
-        withCredentials: true})
+        axiosCLI.get('/posts/'+ id)
         .then(data =>{
             let reponse = data.data;
             this.user.userId = reponse.userId;
@@ -53,10 +51,10 @@ export default {
         create_commentaire(event, id_post){
             event.preventDefault();
             
-            axios.post("http://localhost:5000/api/posts/comment",{
+            axiosCLI.post("/posts/comment",{
                 post: id_post,
                 comment: `${this.comment.texte}`
-            }, {withCredentials: true})
+            })
             .then(data => {
                 const reponse = data.data;
                 const post_comment = this.getOnepost(id_post);
@@ -86,7 +84,7 @@ export default {
         create_like(valeur, post){
             switch(valeur){
                 case 2:{
-                    axios.post("http://localhost:5000/api/posts/like", {post: post,like: valeur }, {withCredentials: true})
+                    axiosCLI.post("/posts/like", {post: post,like: valeur })
                         .then(data => {
                             const reponse = data.data;
                             const post_liked = this.getOnepost(post);
@@ -97,7 +95,7 @@ export default {
                         break;
                 }
                 case 3:{
-                    axios.post("http://localhost:5000/api/posts/like", {post: post,like: valeur }, {withCredentials: true})
+                    axiosCLI.post("/posts/like", {post: post,like: valeur })
                         .then(data => {
                             const reponse = data.data;
                             const post_liked = this.getOnepost(post);
@@ -118,7 +116,7 @@ export default {
         },
         async delete_comment(id_comment, index, post){
             console.log(post);
-            const reponse = await axios.delete(`http://localhost:5000/api/posts/${this.postId}/comment`,{data:{post, id_comment},withCredentials: true});
+            const reponse = await axiosCLI.delete(`/posts/${this.postId}/comment`,{data:{post, id_comment}});
              if(reponse){
                  let post_comment = this.getOnepost(post);
                  console.log(post_comment);
@@ -128,7 +126,7 @@ export default {
         },
         async delete_post(index, post){
             console.log(post);
-            const reponse = await axios.delete(`http://localhost:5000/api/posts/${this.postId}`,{data:{post},withCredentials: true});
+            const reponse = await axiosCLI.delete(`/posts/${this.postId}`,{data:{post}});
              if(reponse){
                  this.posts.splice(index,1);
                  this.$router.replace({path: '/posts'})

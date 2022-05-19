@@ -1,6 +1,6 @@
 
 <script>
-import axios from "axios";
+import axiosCLI from "../axios/index";
 /* import io from 'socket.io-client'; */
 
 export default {
@@ -22,13 +22,9 @@ export default {
     methods:{
         send(event){
             event.preventDefault();
-                axios.post("http://localhost:5000/api/auth/login", {
+                axiosCLI.post("/auth/login", {
                         email: this.email,
-                        password: this.password,},
-                        {
-                        withCredentials: true
-                    
-                })
+                        password: this.password})
                 .then(response => {
                     const token = response.data.xsrfToken;
                     localStorage.setItem("token", token);

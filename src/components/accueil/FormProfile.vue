@@ -1,5 +1,5 @@
 <script>
-import axios from "axios";
+import axiosCLI from "../../axios/index";
 
 export default {
     name: "FormProfile",
@@ -56,7 +56,7 @@ export default {
                 }
             }
 
-            axios.put("http://localhost:5000/api/auth/user/profil", data, {withCredentials: true})
+            axiosCLI.put("/auth/user/profil", data)
             .then(response => {
                 console.log(response)
                 let donnee = response.data;

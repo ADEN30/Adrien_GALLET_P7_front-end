@@ -31,9 +31,9 @@ export default {
             data.append("client", `{"email": "${this.email}", "name": "${this.name}", "firstname": "${this.firstname}", "password": "${this.password}"}`);
             data.append("image", document.getElementById('picture').files[0]);
                 axios.post("http://localhost:5000/api/auth/singup", data)
-                .then(response => {
-                    if(response.data.ok)
-                    JSON.parse(response.data);
+                .then(() => {
+                    alert("Compte créé")
+                    this.$router.push({path: '/'});
                     
                     
                 })

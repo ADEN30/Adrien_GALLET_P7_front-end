@@ -21,7 +21,13 @@ export default {
     computed:{
         namefile(){
             if(!this.file){
-                return this.actuel_picture.split("/users/")[1]
+                if(!this.actuel_picture.split("/users/")[1]){
+                    return "Aucune image";
+                }
+                else{
+                    return this.actuel_picture.split("/users/")[1];
+                }
+                
             }
             else if(this.file){
                 return document.getElementById('picture').files[0].name;

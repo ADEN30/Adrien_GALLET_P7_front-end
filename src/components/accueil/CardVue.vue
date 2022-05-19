@@ -14,7 +14,6 @@ export default {
             postId: null,
             comment:{
                 texte: "",
-                nbr: [],
                 display: false
             },
             like:{
@@ -106,20 +105,16 @@ export default {
             .catch(err => {console.log(err);});
         },
         nb_commentaire(tableau, post){
-            if(tableau.length ==1){
+            if(this.comment.display && this.postId == post){
+                let card = document.getElementById(`post_${this.postId}`)
+                card.style.borderRadius = "20px";
                 return tableau;
             }
-            else if(tableau.length > 1  && !this.comment.display || this.comment.display && this.postId != post){
-                this.comment.nbr = [tableau[0]];
-                return this.comment.nbr;
+            else if(tableau.length > 1){
+                return [tableau[0], tableau[1]]
             }
-            else if(tableau.length > 1 && this.postId == post && this.comment.display){
-                if(tableau.length > 8){
-                    let card = document.getElementById(`post_${this.postId}`)
-                    console.log(card)
-                    card.style.borderRadius = "20px";
-                }
-                return tableau;
+            else{
+                return tableau
             }
         },
         create_like(valeur, post){
@@ -181,16 +176,19 @@ export default {
             else{
                 let user = document.getElementById(`user_${id_post}`);
                 user.style.bottom = "5px;"
-                return false;
+                return true;
             }
         },
         style_user(id_user, id_post){
             if(id_user != this.user.userId){
-                let profile = document.getElementById(`user_${id_post}`);
+                let profile = document.getElementById(`post_${id_post}`);
                 let content = document.getElementById(`content_${id_post}`);
+                console.log(content);
+                console.log(document.getElementById(`user_${id_post}`))
+                document.get
                 if(profile){
-                    profile.style.bottom = '5px'
-                    content.style.marginTop = '10px'
+                    profile.style.bottom = '0px'
+                    content.style.marginTop = '30px'
                     
                 } 
             }
@@ -216,9 +214,15 @@ export default {
                     <div @click="delete_post( numeros, post.id_post)"><font-awesome-icon icon="trash" :class="$style.card_tool_modif_delete_image"/> Supprimer</div>
             </div>
 
-            <div :class="$style.card_content" @click="this.tools.display = false"  >
+            <div :class="$style.card_content"  @click="this.tools.display = false"  >
 
-                <div  :class="$style.card_user" :id="'user_'+ post.id_post" v-if="style_user(post.userid_post, post.id_post)">
+                <div  :class="$style.card_user_1" :id="'user_'+ post.id_post" v-if="post.userid_post == this.user.userId || this.user.droit == 1">
+
+                    <img :src="post.user_build.picture_user" alt="" > 
+                    <h2 >{{post.user_build.firstname_user}} {{post.user_build.name_user}}</h2>
+                    
+                </div>
+                <div  :class="$style.card_user_2" :id="'user_'+ post.id_post" v-else>
 
                     <img :src="post.user_build.picture_user" alt="" > 
                     <h2 >{{post.user_build.firstname_user}} {{post.user_build.name_user}}</h2>
@@ -239,8 +243,8 @@ export default {
 
             </div>
             
-            <div :class="$style.card_comment">
-                <ul v-if="post.comment" :class="$style.card_comment_liste">
+            <div :class="$style.card_comment" >
+                <ul v-if="post.comment.length >0" :class="$style.card_comment_liste">
                     <li  v-for="(commentaire, index) in nb_commentaire(post.comment,post.id_post)"  :key="commentaire.id_user_post_comment" :class="$style.card_comment_liste_ligne" > 
                         
                         <div :class="$style.card_comment_liste_ligne_user" >
@@ -251,7 +255,7 @@ export default {
                     </li>
                 </ul>
                 <div :class="$style.card_comment_action" v-if="post.comment">
-                    <div :class="$style.card_comment_action_more" v-if=" post.comment.length > 1 && this.comment.display == false || this.comment.display == true && this.postId != post.id_post" @click="this.postId= post.id_post; this.comment.display = true">{{post.comment.length}} autres commentaires</div> 
+                    <div :class="$style.card_comment_action_more" v-if=" post.comment.length > 2 && this.comment.display == false || this.comment.display == true && this.postId != post.id_post" @click="this.postId= post.id_post; this.comment.display = true">{{post.comment.length -2}} autres commentaires</div> 
                     <div :class="$style.card_comment_action_less" v-else-if="post.id_post == this.postId && this.comment.display == true" @click="this.postId = null; this.comment.display = false">Réduire...</div>
                 </div>
                 <div :class="$style.card_comment_btn">
@@ -314,7 +318,7 @@ export default {
         object-fit: cover;
     }
 
-    &_user{
+    &_user_1{
         display: flex;
         align-items: center;
         column-gap: 20px;
@@ -322,6 +326,24 @@ export default {
         padding: 0px 10px;
         position: relative;
         bottom: 20px;
+
+        img{
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            border: 1px solid;
+            object-fit: cover;
+        }
+    }
+    &_user_2{
+        display: flex;
+        align-items: center;
+        column-gap: 20px;
+        border-bottom: 0px;
+        padding: 0px 10px;
+        position: relative;
+        bottom: 0px;
+        margin-bottom: 10px;
 
         img{
             height: 50px;
@@ -339,6 +361,7 @@ export default {
         position: relative;
         left: 20px;
         width: min-content;
+        margin-bottom: 20px;
 
         &_like{
             display: flex;
@@ -409,6 +432,7 @@ export default {
 
 
                     &_delete{
+                        cursor: pointer;
                         position: relative;
                         left: 80%;
                         bottom: 40px;

@@ -14,7 +14,6 @@ export default {
             postId: null,
             comment:{
                 texte: "",
-                nbr: [],
                 display: false
             },
             like:{
@@ -24,7 +23,8 @@ export default {
                 display: false
             },
             user:{
-                userId: ""
+                userId: "",
+                droit: 2
             }
             
         }
@@ -40,6 +40,7 @@ export default {
         .then(data =>{
             let reponse = data.data;
             this.user.userId = reponse.userId;
+            this.user.droit = reponse.droit;
             if(reponse.publication_commenter[0])
                 this.posts.push(reponse.publication_commenter[0])
             else{
@@ -70,22 +71,17 @@ export default {
             .catch(err => {console.log(err);});
         },
         nb_commentaire(tableau, post){
-            if(tableau.length ==1){
+            if(this.comment.display && this.postId == post){
+                let card = document.getElementById(`post_${this.postId}`)
+                card.style.borderRadius = "20px";
                 return tableau;
             }
-            else if(tableau.length > 1  && !this.comment.display ){
-                this.comment.nbr = [tableau[0], tableau[1]];
-                return this.comment.nbr;
+            else if(tableau.length > 1){
+                return [tableau[0], tableau[1]]
             }
-            else if(tableau.length > 1 && this.postId == post && this.comment.display){
-                if(tableau.length > 8){
-                    let card = document.getElementById(`post_${this.postId}`)
-                    console.log(card)
-                    card.style.borderRadius = "20px";
-                }
-                return tableau;
+            else{
+                return tableau
             }
-            
         },
         create_like(valeur, post){
             switch(valeur){
@@ -122,7 +118,7 @@ export default {
         },
         async delete_comment(id_comment, index, post){
             console.log(post);
-            const reponse = axios.delete(`http://localhost:5000/api/posts/${this.postId}/comment`,{data:{post, id_comment},withCredentials: true});
+            const reponse = await axios.delete(`http://localhost:5000/api/posts/${this.postId}/comment`,{data:{post, id_comment},withCredentials: true});
              if(reponse){
                  let post_comment = this.getOnepost(post);
                  console.log(post_comment);
@@ -132,7 +128,7 @@ export default {
         },
         async delete_post(index, post){
             console.log(post);
-            const reponse = axios.delete(`http://localhost:5000/api/posts/${this.postId}`,{data:{post},withCredentials: true});
+            const reponse = await axios.delete(`http://localhost:5000/api/posts/${this.postId}`,{data:{post},withCredentials: true});
              if(reponse){
                  this.posts.splice(index,1);
                  this.$router.replace({path: '/posts'})
@@ -150,7 +146,7 @@ export default {
 
     <div v-for="(post, numeros) of posts" :key="post.id_post" :id="'post_'+ post.id_post " :class="$style.card" >
         
-            <div :class="$style.card_tools" v-if="this.user.userId == post.userid_post">
+            <div :class="$style.card_tools" v-if="this.user.userId == post.userid_post || this.user.droit == 1">
             <div @click="this.tools.display = true; this.postId = post.id_post"><font-awesome-icon icon="ellipsis-vertical" :class="$style.card_tools_image"/></div>
             </div>
 
@@ -159,7 +155,13 @@ export default {
                     <div @click="this.postId = post.id_post; delete_post( numeros, post.id_post)"><font-awesome-icon icon="trash" :class="$style.card_tool_modif_delete_image"/> Supprimer</div>
             </div>
             <div :class="$style.car_content" @click="this.tools.display = false">
-                <div  :class="$style.card_user">
+                <div  :class="$style.card_user_1" v-if="post.userid_post == this.user.userId || this.user.droit == 1">
+
+                    <img :src="post.user_build.picture_user" alt="" >
+                    <h2 >{{post.user_build.firstname_user}} {{post.user_build.name_user}}</h2>
+                    
+                </div>
+                <div  :class="$style.card_user_2" v-else>
 
                     <img :src="post.user_build.picture_user" alt="" >
                     <h2 >{{post.user_build.firstname_user}} {{post.user_build.name_user}}</h2>
@@ -171,14 +173,14 @@ export default {
                     <p v-if="post.text_post != ''"> {{post.text_post}}</p>
                 </div> 
                 <img :src="post.picture_post" alt="" :class="$style.card_picture">
-                <div>
-                    <button type="input" name="like" :id="'like_' + post.id_post" @click="create_like(2, post.id_post)"><font-awesome-icon icon="thumbs-up" />   {{post.nbLike_post}}</button>
-                    <button type="input" name="dislike" :id="'dislike_' + post.id_post" @click="create_like(3, post.id_post)"><font-awesome-icon icon="thumbs-down" />    {{post.nbDislike_post}}</button>
+                <div :class="$style.card_emoji">
+                    <button :class="$style.card_emoji_like" type="input" name="like" :id="'like_' + post.id_post" @click="create_like(2, post.id_post)"><font-awesome-icon icon="thumbs-up" />   {{post.nbLike_post}}</button>
+                    <button :class="$style.card_emoji_dislike" type="input" name="dislike" :id="'dislike_' + post.id_post" @click="create_like(3, post.id_post)"><font-awesome-icon icon="thumbs-down" />    {{post.nbDislike_post}}</button>
                 </div>
             </div>
             
             <div :class="$style.card_comment">
-                <ul v-if="post.comment" :class="$style.card_comment_liste">
+                <ul v-if="post.comment.length >0" :class="$style.card_comment_liste">
                     <li  v-for="(commentaire, index) in nb_commentaire(post.comment,post.id_post)"  :key="commentaire.id_user_post_comment" :class="$style.card_comment_liste_ligne" > 
                         <div :class="$style.card_comment_liste_ligne_user" >
                             <img :src="commentaire.picture" alt=""> <p >{{commentaire.firstname}} {{commentaire.name}} </p>
@@ -188,7 +190,7 @@ export default {
                     </li>
                 </ul>
                 <div v-if="post.comment" :class="$style.card_comment_action">
-                    <div :class="$style.card_comment_action_more" v-if=" post.comment.length > 1 && this.comment.display == false || this.comment.display == true && this.postId != post.id_post" @click="this.postId= post.id_post; this.comment.display = true">{{post.comment.length}} autres commentaires</div> 
+                    <div :class="$style.card_comment_action_more" v-if=" post.comment.length > 2 && this.comment.display == false || this.comment.display == true && this.postId != post.id_post" @click="this.postId= post.id_post; this.comment.display = true">{{post.comment.length-2}} autres commentaires</div> 
                     <div :class="$style.card_comment_action_less" v-else-if="post.id_post == this.postId && this.comment.display == true" @click="this.postId = null; this.comment.display = false">Réduire...</div>
                 </div>
                 <div :class="$style.card_comment_btn">
@@ -212,7 +214,7 @@ export default {
 
 .card{
     border-radius: 3%;
-    background-color: white;
+    background: linear-gradient(#f4f4f4, #e54b4b );
     box-shadow: 0px 0px 0px 1px #000000;
     padding: 10px 0px;
     z-index: 3;
@@ -221,14 +223,21 @@ export default {
         z-index: 1;
 
         &_post{
-            text-align: center;
+            text-align: left;
             margin-bottom: 5%;
+            display: flex;
+            flex-direction: column;
+            row-gap: 30px;
+            padding-left: 20px;
 
             &_titre{
-                text-align: left;
+                width: 250px;
+                word-wrap: break-word;
             }
 
             &_texte{
+                word-wrap: break-word;
+                width: 90%;
 
             }
 
@@ -238,10 +247,11 @@ export default {
 
     &_picture{
         width: 100%;
+        height: 300px;
         object-fit: cover;
     }
 
-    &_user{
+    &_user_1{
         display: flex;
         align-items: center;
         column-gap: 20px;
@@ -258,6 +268,54 @@ export default {
             object-fit: cover;
         }
     }
+    &_user_2{
+        display: flex;
+        align-items: center;
+        column-gap: 20px;
+        border-bottom: 0px;
+        padding: 0px 10px;
+        position: relative;
+        bottom: 0px;
+        margin-bottom: 10px;
+
+        img{
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            border: 1px solid;
+            object-fit: cover;
+        }
+    }
+    &_emoji{
+
+        display: flex;
+        column-gap: 20px;
+        position: relative;
+        left: 20px;
+        width: min-content;
+        margin-bottom: 20px;
+
+        &_like{
+            display: flex;
+            column-gap: 7px;
+            font-size: 20px;
+            background-color: white;
+            border: 0px;
+            padding: 4px 5px;
+            border-radius: 50px;
+        }
+        &_dislike{
+            display: flex;
+            align-items: center;
+            column-gap: 7px;
+            font-size: 20px;
+            background-color: white;
+            border: 0px;
+            padding: 4px 5px;
+            border-radius: 50px;
+        }
+
+    }
 
     &_comment{
         width: 100%;
@@ -273,7 +331,7 @@ export default {
                 margin-bottom: 10px;
                 list-style: none;
                 border-radius: 0px;
-                background-color: #9c999961;
+                background-color: white;
                 height: min-content;
                 padding: 5px;
                 border-radius: 15px;
@@ -302,6 +360,7 @@ export default {
                     padding: 5px;
 
                     &_delete{
+                        cursor: pointer;
                         position: relative;
                         left: 85%;
                         bottom: 40px;
@@ -346,6 +405,7 @@ export default {
     }
 }
 .card_tools{
+    cursor: pointer;
    position: relative;
    left: 95%;
    font-size: 30px;
@@ -361,7 +421,6 @@ export default {
         z-index: 4;
 
         &_image{
-            
             font-size: 10px;
         }
 

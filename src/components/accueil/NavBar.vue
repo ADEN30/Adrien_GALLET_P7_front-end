@@ -5,7 +5,7 @@
             <input type="search">
             <router-link :class="$style.post_lien" to="/posts">Acceuil </router-link>
             <router-link :class="$style.post_lien" to="/posts/create">Créé un post</router-link>
-            <router-link :class="$style.user_lien" to="/users/profile">Profile</router-link>
+            <router-link :class="$style.user_lien" to="/users/profile">Profil</router-link>
             <router-link :class="$style.user_lien" to="/" @click="logout()">Déconexion</router-link>
         </div>
         

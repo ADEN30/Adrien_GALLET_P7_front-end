@@ -85,7 +85,7 @@ export default {
     <div :class="$style.div">
     <form  :class="$style.form" id="update_profile">
         <fieldset :class="$style.field" name="client">
-            <legend :class="$style.field_titre">Profile</legend>
+            <legend :class="$style.field_titre">Profil</legend>
 
             <label for="email">Email</label>
             <input :class="$style.field_btn" type="email" name="email" pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" :value="this.actuel_email" >
@@ -96,7 +96,7 @@ export default {
             <label for="firstname">Prénom</label>
             <input :class="$style.field_btn" type="text" name="firstname" required="true" :value="this.actuel_firstname" >
         
-            <label for="picture">Photo de profile</label>
+            <label for="picture">Photo de profil</label>
             <label for="picture" :class="$style.picture_profile" id="label_picture">{{namefile}}</label>
             <input :class="$style.field_btn_picture" type="file" id="picture" name="image" required="true" @change="this.file= true; getpicture() "> 
             

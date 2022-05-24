@@ -155,22 +155,22 @@ export default {
             <div :class="$style.car_content" @click="this.tools.display = false">
                 <div  :class="$style.card_user_1" v-if="post.userid_post == this.user.userId || this.user.droit == 1">
 
-                    <img :src="post.user_build.picture_user" alt="" >
-                    <h2 >{{post.user_build.firstname_user}} {{post.user_build.name_user}}</h2>
+                    <img :src="post.user_build.picture_user" alt="image du créateur du post" >
+                    <h1 >{{post.user_build.firstname_user}} {{post.user_build.name_user}}</h1>
                     
                 </div>
                 <div  :class="$style.card_user_2" v-else>
 
-                    <img :src="post.user_build.picture_user" alt="" >
-                    <h2 >{{post.user_build.firstname_user}} {{post.user_build.name_user}}</h2>
+                    <img :src="post.user_build.picture_user" alt="image du créateur du post" >
+                    <h1 >{{post.user_build.firstname_user}} {{post.user_build.name_user}}</h1>
                     
                 </div>
             <div>
                 <div :class="$style.card_content_post">
-                    <h3 v-if="post.titre_post != ''"> {{post.titre_post}}</h3>
+                    <h2 v-if="post.titre_post != ''"> {{post.titre_post}}</h2>
                     <p v-if="post.text_post != ''"> {{post.text_post}}</p>
                 </div> 
-                <img :src="post.picture_post" alt="" :class="$style.card_picture">
+                <img :src="post.picture_post" alt="image du post" :class="$style.card_picture">
                 <div :class="$style.card_emoji">
                     <button :class="$style.card_emoji_like" type="input" name="like" :id="'like_' + post.id_post" @click="create_like(2, post.id_post)"><font-awesome-icon icon="thumbs-up" />   {{post.nbLike_post}}</button>
                     <button :class="$style.card_emoji_dislike" type="input" name="dislike" :id="'dislike_' + post.id_post" @click="create_like(3, post.id_post)"><font-awesome-icon icon="thumbs-down" />    {{post.nbDislike_post}}</button>

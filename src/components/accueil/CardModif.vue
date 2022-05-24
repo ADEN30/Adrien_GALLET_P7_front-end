@@ -9,14 +9,17 @@
                 <div :class="$style.card_user">
 
                     <img :src="picture" alt="">
-                    <h2 >Jean tend</h2>
+                    <h1 >Jean tend</h1>
 
                 </div>
 
-            <div>
-                <h3 v-if="titre != ''"> {{titre}}</h3>
-                <p v-if="texte != ''"> {{texte}}</p>
-                <img :src="picture" alt="" :class="$style.card_picture">
+            <div >
+                <div :class="$style.card_content_post">
+                    <h2 :class="$style.card_content_post_titre" v-if="titre != ''"> {{titre}}</h2>
+                    <p :class="$style.card_content_post_texte" v-if="texte != ''"> {{texte}}</p>
+                </div>
+                
+                <img :src="picture" alt="photo de profile" :class="$style.card_picture">
 
                 <div>
 
@@ -39,7 +42,7 @@
                     <li :class="$style.card_comment_liste_ligne"> 
 
                         <div :class="$style.card_comment_liste_ligne_user" >
-                            <img :src="picture" alt=""> <p >Jean Baptiste </p>
+                            <img :src="picture" alt="image du post"> <p >Jean Baptiste </p>
                         </div> 
                         <p :class="$style.card_comment_liste_ligne_comment">C'est très beau !</p>
                     </li>
@@ -77,12 +80,35 @@ export default {
 .card{
     border-radius: 3%;
     background: linear-gradient(#909cc27e, #e54b4b7d );
-    box-shadow: 0px 0px 0px 1px #000000;
+    box-shadow: 5px 6px 10px 0px #000000;
     padding: 10px 0px;
     z-index: 3;
     width: 500px;
+
     &_content{
         z-index: 1;
+
+        &_post{
+            text-align: left;
+            margin-bottom: 5%;
+            display: flex;
+            flex-direction: column;
+            row-gap: 30px;
+            padding-left: 20px;
+
+            &_titre{
+                width: 250px;
+                word-wrap: break-word;
+            }
+
+            &_texte{
+                word-wrap: break-word;
+                width: 90%;
+
+            }
+
+            
+        }
     }
 
     &_picture{

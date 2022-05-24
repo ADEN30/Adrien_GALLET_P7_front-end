@@ -42,7 +42,7 @@ export default {
 
 <template>
 <div :class="$style.div">
-    <img src="../assets/Groupomania_Logos/icon.svg" :class="$style.div_logo">
+    <img src="../assets/Groupomania_Logos/icon.svg" alt="logo groupomania" :class="$style.div_logo">
     <form  :class="$style.form">
         <fieldset :class="$style.field">
             <legend :class="$style.field_titre">Connectez-vous</legend>

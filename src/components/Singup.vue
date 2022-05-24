@@ -54,7 +54,7 @@ export default {
 
 <template>
     <div :class="$style.div">
-    <img src="../assets/Groupomania_Logos/icon-left-font-monochrome-black.svg" alt="" :class="$style.div_logo">
+    <img src="../assets/Groupomania_Logos/icon-left-font-monochrome-black.svg" alt="logo de groupomania" :class="$style.div_logo">
     <form  :class="$style.form" id="singup">
         <fieldset :class="$style.field">
             <legend :class="$style.field_titre">Inscrivez-vous</legend>
@@ -68,7 +68,7 @@ export default {
             <label for="firstname">Prénom</label>
             <input :class="$style.field_btn" type="text" name="firstname" required="true" v-model="firstname" >
 
-            <label for="picture">Photo de profile</label>
+            <label for="picture">Photo de profil</label>
             <label for="picture" :class="$style.picture_profile" id="label_picture">Choisir une image...</label>
             <input :class="$style.field_btn_picture" type="file" id="picture" name="image" required="true" @change="getpicture()"> 
 
@@ -95,11 +95,7 @@ export default {
     flex-direction: column;
     align-items: center;
     row-gap: 20px;
-    position: absolute;
     width: 800px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     background: linear-gradient(#909cc2, #e54b4b );
     padding: 20px 0px;
 

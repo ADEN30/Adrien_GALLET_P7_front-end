@@ -166,33 +166,7 @@ export default {
                  this.posts.splice(index,1);
              }
 
-        }/* ,
-        display_user(id_user, id_post){
-            if(id_user == this.user.userId && this.postId == id_post){
-                console.log(id_post);
-                return true;
-            }
-            else{
-                let user = document.getElementById(`user_${id_post}`);
-                user.style.bottom = "5px;"
-                return true;
-            }
-        },
-        style_user(id_user, id_post){
-            if(id_user != this.user.userId){
-                let profile = document.getElementById(`post_${id_post}`);
-                let content = document.getElementById(`content_${id_post}`);
-                console.log(content);
-                console.log(document.getElementById(`user_${id_post}`))
-                document.get
-                if(profile){
-                    profile.style.bottom = '0px'
-                    content.style.marginTop = '30px'
-                    
-                } 
-            }
-            return true;
-        } */
+        }
 
     }
 }
@@ -202,7 +176,7 @@ export default {
 <div :class="$style.container" >
     <div v-if="posts.length == 0"> Aucune publication</div>
 
-    <div v-for="(post, numeros) of posts" :key="post.id_post" :id="'post_'+ post.id_post " :class="$style.card" >
+    <article v-for="(post, numeros) of posts" :key="post.id_post" :id="'post_'+ post.id_post " :class="$style.card" >
         
             <div :class="$style.card_tools" v-if="post.userid_post == this.user.userId && post.id_post || this.user.droit == 1" >
             <div @click="this.tools.display = true; this.postId = post.id_post"><font-awesome-icon icon="ellipsis-vertical" :class="$style.card_tools_image"/></div>
@@ -217,24 +191,24 @@ export default {
 
                 <div  :class="$style.card_user_1" :id="'user_'+ post.id_post" v-if="post.userid_post == this.user.userId || this.user.droit == 1">
 
-                    <img :src="post.user_build.picture_user" alt="" > 
-                    <h2 >{{post.user_build.firstname_user}} {{post.user_build.name_user}}</h2>
+                    <img :src="post.user_build.picture_user" alt="image du créateur du post" > 
+                    <h1 >{{post.user_build.firstname_user}} {{post.user_build.name_user}}</h1>
                     
                 </div>
                 <div  :class="$style.card_user_2" :id="'user_'+ post.id_post" v-else>
 
-                    <img :src="post.user_build.picture_user" alt="" > 
-                    <h2 >{{post.user_build.firstname_user}} {{post.user_build.name_user}}</h2>
+                    <img :src="post.user_build.picture_user" alt="image du créateur du post" > 
+                    <h1 >{{post.user_build.firstname_user}} {{post.user_build.name_user}}</h1>
                     
                 </div>
 
             <div>
 
                 <div :class="$style.card_content_post" :id="'content_'+ post.id_post">
-                    <h3 :class="$style.card_content_post_titre"  v-if="post.titre_post != ''"> {{post.titre_post}}</h3>
+                    <h2 :class="$style.card_content_post_titre"  v-if="post.titre_post != ''"> {{post.titre_post}}</h2>
                     <p :class="$style.card_content_post_texte" v-if="post.text_post != ''"> {{post.text_post}}</p>
                 </div> 
-                <router-link :to="`/posts/${post.id_post}`"><img :src="post.picture_post" alt="" :class="$style.card_picture"></router-link>
+                <router-link :to="`/posts/${post.id_post}`"><img :src="post.picture_post" alt="image du post" :class="$style.card_picture"></router-link>
                 <div :class="$style.card_emoji">
                     <button :class="$style.card_emoji_like" type="input" name="like" :id="'like_' + post.id_post" @click="create_like(2, post.id_post)"><font-awesome-icon icon="thumbs-up" />   {{post.nbLike_post}}</button>
                     <button :class="$style.card_emoji_dislike" type="input" name="dislike" :id="'dislike_' + post.id_post" @click="create_like(3, post.id_post)"><font-awesome-icon icon="thumbs-down" />    {{post.nbDislike_post}}</button>
@@ -247,7 +221,7 @@ export default {
                     <li  v-for="(commentaire, index) in nb_commentaire(post.comment,post.id_post)"  :key="commentaire.id_user_post_comment" :class="$style.card_comment_liste_ligne" > 
                         
                         <div :class="$style.card_comment_liste_ligne_user" >
-                            <img :src="commentaire.picture" alt=""> <p >{{commentaire.firstname}} {{commentaire.name}} </p>
+                            <img :src="commentaire.picture" alt="image du créateur du commentaire"> <p >{{commentaire.firstname}} {{commentaire.name}} </p>
                         </div> 
                         <div :class="$style.card_comment_liste_ligne_comment_delete" @click="delete_comment(commentaire.id_comment, index, post.id_post);  ">Supprimer</div>
                         <p :class="$style.card_comment_liste_ligne_comment">{{commentaire.comment}}</p>
@@ -263,7 +237,7 @@ export default {
                 </div>
             </div>
         </div>
-    </div>
+    </article>
 </div>
 </template>
 

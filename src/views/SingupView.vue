@@ -1,5 +1,5 @@
 <template>
-  <SingupVue/>
+  <SingupVue :class="$style.singup"/>
     
 </template>
 
@@ -15,4 +15,10 @@ export default {
 </script>
 
 <style lang="scss" module>
+.singup{
+  position: relative;
+  margin-top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+}
 </style>

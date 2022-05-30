@@ -37,7 +37,6 @@ export default {
     async beforeCreate(){
         const reponse = await axiosCLI.get(`/auth/user/profil`);
         const donnee = reponse.data;
-        console.log(donnee)
         this.email = donnee.email_user;
         this.name = donnee.name_user;
         this.firstname = donnee.firstname_user;

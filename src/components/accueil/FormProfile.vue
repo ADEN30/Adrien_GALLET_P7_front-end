@@ -42,6 +42,7 @@ export default {
         update(event){
             event.preventDefault();
             let data; console.log(document.getElementById('picture').files[0]);
+            console.log(this.file)
             if(this.file){
                 data = new FormData();
                 data.set("client", `{"email": "${document.getElementsByName("email")[0].value}", "name": "${document.getElementsByName("name")[0].value}", "firstname": "${document.getElementsByName("firstname")[0].value}"}`);
@@ -58,7 +59,6 @@ export default {
 
             axiosCLI.put("/auth/user/profil", data)
             .then(response => {
-                console.log(response)
                 let donnee = response.data;
                 this.$emit('update-profile', {
                     picture_update: donnee.picture
@@ -87,17 +87,17 @@ export default {
         <legend :class="$style.field_titre">Profil</legend>
 
         <label for="email">Email</label>
-        <input :class="$style.field_btn" type="email" name="email" required="required" pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" :value="this.actuel_email" >
+        <input :class="$style.field_btn" type="email" name="email" pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" :value="this.actuel_email" >
 
         <label for="name">Nom</label>
-        <input :class="$style.field_btn" type="text" name="name" required="required" pattern="^([A-Z][a-z]+([ ]?[a-z]?['-]?[A-Z][a-z]+)*)$" :value="this.actuel_name" >
+        <input :class="$style.field_btn" type="text" name="name" pattern="^([A-Z][a-z]+([ ]?[a-z]?['-]?[A-Z][a-z]+)*)$" :value="this.actuel_name" >
 
         <label for="firstname">Prénom</label>
-        <input :class="$style.field_btn" type="text" name="firstname" required="required" pattern="^([A-Z][a-z]+([ ]?[a-z]?['-]?[A-Z][a-z]+)*)$" :value="this.actuel_firstname" >
+        <input :class="$style.field_btn" type="text" name="firstname"  pattern="^([A-Z][a-z]+([ ]?[a-z]?['-]?[A-Z][a-z]+)*)$" :value="this.actuel_firstname" >
     
         <label for="picture">Photo de profil</label>
         <label for="picture" :class="$style.picture_profile" id="label_picture">{{namefile}}</label>
-        <input :class="$style.field_btn_picture" type="file" id="picture" name="image" required="required" pattern="^.*\.(png|jpeg|jpg|gif)$" @change="this.file= true; getpicture() "> 
+        <input :class="$style.field_btn_picture" type="file" id="picture" name="image" pattern="^.*\.(.png|.jpeg|.jpg|.gif)$" @change="this.file= true; getpicture() "> 
         
         <input :class="$style.field_send" type="submit" value="Mettre à jour">
         

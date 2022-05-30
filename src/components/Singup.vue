@@ -26,7 +26,6 @@ export default {
     methods:{
         send(event){
             event.preventDefault();
-            console.log(document.getElementById('singup'));
             let data = new FormData();
             data.append("client", `{"email": "${this.email}", "name": "${this.name}", "firstname": "${this.firstname}", "password": "${this.password}"}`);
             data.append("image", document.getElementById('picture').files[0]);
@@ -37,7 +36,7 @@ export default {
                     
                     
                 })
-                .catch(err => console.log(err));
+                .catch(err => alert( err +" : Impossible de créer le compte"));
                 
         },
         getpicture(){

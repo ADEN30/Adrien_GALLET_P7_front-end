@@ -121,17 +121,14 @@ export default {
             }
         },
         async delete_comment(id_comment, index, post){
-            console.log(post);
             const reponse = await axiosCLI.delete(`/posts/${this.postId}/comment`,{data:{post, id_comment}});
              if(reponse){
                  let post_comment = this.getOnepost(post);
-                 console.log(post_comment);
                  post_comment.comment.splice(index,1);
              }
 
         },
         async delete_post(index, post){
-            console.log(post);
             const reponse = await axiosCLI.delete(`/posts/${this.postId}`,{data:{post}});
              if(reponse){
                  this.posts.splice(index,1);

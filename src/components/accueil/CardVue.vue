@@ -49,7 +49,6 @@ export default {
                 if(post.length > 1){
                     let nbr_post = post.length;
                     let compteur = 0;
-                    console.log("commence");
                     do{
                         let index = 0;
                         if(post.length > 1){
@@ -61,17 +60,12 @@ export default {
                                 }
                                 else if(id_1 < post[i].id_post){
                                     id_1 = post[i].id_post;
-                                    console.log("id_1: " + id_1);
                                     index = i;
                                 }
                             }
                         }
                         this.posts.push(post[index]);
-                        
-                        console.log("index: "+index);
                         post.splice(index, 1);
-                        console.log(post);
-                        console.log("compteur: "+compteur)
                         
                         compteur+=1 ;
                         
@@ -80,7 +74,6 @@ export default {
                 else{
                     this.posts.push(post[0]);
                 }
-                console.log(this.posts)
             })
             .catch(err => console.log(err));
     },
@@ -158,7 +151,6 @@ export default {
             }
         },
         async delete_comment(id_comment, index, post){
-            console.log(post);
             const reponse = await axiosCLI.delete("/posts/comment",{data:{post, id_comment}});
              if(reponse){
                  let post_comment = this.getOnepost(post);

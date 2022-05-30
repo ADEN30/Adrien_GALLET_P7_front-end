@@ -1,7 +1,9 @@
 <template>
     <NavBar/>
-    <form-card :class="$style.form" :post_id="this.post" :titre="this.titre" :texte="this.texte" :picture="this.picture" @update-post="update_data"/>
-    <card-modif :class="$style.post" :picture="this.picture" :titre="this.titre" :texte="this.texte"/>
+    <div :class="$style.content">
+        <form-card :class="$style.form" :post_id="this.post" :titre="this.titre" :texte="this.texte" :picture="this.picture" @update-post="update_data"/>
+        <card-modif :class="$style.post" :picture="this.picture" :titre="this.titre" :texte="this.texte"/>
+    </div>
 </template>
 
 <script>
@@ -57,18 +59,30 @@ export default {
 </script>
 
 <style lang="scss" module>
-.form{
+
+.content{
     position: relative;
-    transform: translateX(-50%);
     left: 50%;
-    top: 40px;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
+    align-items: center;
 }
-.post{
-    position: relative;
-    width: min-content;
-    left: 50%;
-    top: 100px;
-    transform: translateX(-50%);
-    padding-bottom: 30px;
+
+.form{
+    border-radius: 2%;
+    box-shadow: 1px 1px 5px 0px rgb(0, 0, 0);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 20px;
+    width: 500px;
+    background: linear-gradient(#909cc2, #e54b4b );
+    padding: 20px 0px;
+
+    @media screen and (max-width: 510px) {
+                width: 300px;
+            }
 }
 </style>

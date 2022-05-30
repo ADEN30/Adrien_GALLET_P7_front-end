@@ -30,7 +30,7 @@ export default {
             let data = new FormData();
             data.append("client", `{"email": "${this.email}", "name": "${this.name}", "firstname": "${this.firstname}", "password": "${this.password}"}`);
             data.append("image", document.getElementById('picture').files[0]);
-                axios.post("http://localhost:5000/api/auth/singup", data)
+                axios.post("http://localhost:3030/api/auth/singup", data)
                 .then(() => {
                     alert("Compte créé")
                     this.$router.push({path: '/'});
@@ -60,20 +60,20 @@ export default {
             <legend :class="$style.field_titre">Inscrivez-vous</legend>
 
             <label for="email">Email</label>
-            <input :class="$style.field_btn" type="email" name="email" required="true" autocomplete="email" v-model="email" >
+            <input :class="$style.field_btn" type="email" name="email" required="true" pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" autocomplete="email" v-model="email" >
 
-            <label for="name">Nom</label>
-            <input :class="$style.field_btn" type="text" name="name" required="true" v-model="name" >
+            <label for="name" >Nom</label>
+            <input :class="$style.field_btn" type="text" name="name" pattern="^([A-Z][a-z]+([ ]?[a-z]?['-]?[A-Z][a-z]+)*)$" required="true" v-model="name" >
 
             <label for="firstname">Prénom</label>
-            <input :class="$style.field_btn" type="text" name="firstname" required="true" v-model="firstname" >
+            <input :class="$style.field_btn" type="text" name="firstname" pattern="^([A-Z][a-z]+([ ]?[a-z]?['-]?[A-Z][a-z]+)*)$" required="true" v-model="firstname" >
 
             <label for="picture">Photo de profil</label>
             <label for="picture" :class="$style.picture_profile" id="label_picture">Choisir une image...</label>
-            <input :class="$style.field_btn_picture" type="file" id="picture" name="image" required="true" @change="getpicture()"> 
+            <input :class="$style.field_btn_picture" type="file" id="picture" name="image" required="true" pattern="^.*\.(png|jpeg|jpg|gif)$" @change="getpicture()"> 
 
             <label for="password">Mot de passe</label>
-            <input :class="$style.field_btn" type="password" name="password" id="password" required="true" v-model="password"> 
+            <input :class="$style.field_btn" type="password" name="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" id="password" required="true" v-model="password"> 
             
             <input :class="$style.field_send" type="submit" id="envoi_login" @click="send($event)">
             
@@ -99,8 +99,16 @@ export default {
     background: linear-gradient(#909cc2, #e54b4b );
     padding: 20px 0px;
 
+    @media screen and (max-width: 510px) {
+        width: 300px;
+    }
+
     &_logo{
-        width : 600px;
+        width : 400px;
+
+        @media screen and (max-width: 510px) {
+            width: 200px;
+        }
     }
 
     &_login{

@@ -50,6 +50,8 @@ export default {
     methods:{
         create_commentaire(event, id_post){
             event.preventDefault();
+            if(this.comment.texte != ""){
+
             
             axiosCLI.post("/posts/comment",{
                 post: id_post,
@@ -67,6 +69,10 @@ export default {
                 this.comment.texte = "";
             })
             .catch(err => {console.log(err);});
+            }
+            else{
+                alert("Impossible de créé un commentaire vide");
+            }
         },
         nb_commentaire(tableau, post){
             if(this.comment.display && this.postId == post){
@@ -167,8 +173,8 @@ export default {
                 </div>
             <div>
                 <div :class="$style.card_content_post">
-                    <h2 v-if="post.titre_post != ''"> {{post.titre_post}}</h2>
-                    <p v-if="post.text_post != ''"> {{post.text_post}}</p>
+                    <h2 :class="$style.card_content_post_titre" v-if="post.titre_post != ''"> {{post.titre_post}}</h2>
+                    <p :class="$style.card_content_post_texte" v-if="post.text_post != ''"> {{post.text_post}}</p>
                 </div> 
                 <img :src="post.picture_post" alt="image du post" :class="$style.card_picture">
                 <div :class="$style.card_emoji">
@@ -183,7 +189,7 @@ export default {
                         <div :class="$style.card_comment_liste_ligne_user" >
                             <img :src="commentaire.picture" alt=""> <p >{{commentaire.firstname}} {{commentaire.name}} </p>
                         </div> 
-                        <div :class="$style.card_comment_liste_ligne_comment_delete" @click="delete_comment(commentaire.id_comment, index, post.id_post)">Supprimer</div>
+                        <div :class="$style.card_comment_liste_ligne_comment_delete" @click="delete_comment(commentaire.id_comment, index, post.id_post)" v-if="post.user_build.uerid_post == commentaire.id_comment">Supprimer</div>
                         <p :class="$style.card_comment_liste_ligne_comment">{{commentaire.comment}}</p>
                     </li>
                 </ul>
@@ -191,10 +197,10 @@ export default {
                     <div :class="$style.card_comment_action_more" v-if=" post.comment.length > 2 && this.comment.display == false || this.comment.display == true && this.postId != post.id_post" @click="this.postId= post.id_post; this.comment.display = true">{{post.comment.length-2}} autres commentaires</div> 
                     <div :class="$style.card_comment_action_less" v-else-if="post.id_post == this.postId && this.comment.display == true" @click="this.postId = null; this.comment.display = false">Réduire...</div>
                 </div>
-                <div :class="$style.card_comment_btn">
-                    <input type="text" :class="$style.card_comment_btn_write" id="texte" v-model="comment.texte">
-                    <a @click="create_commentaire($event, post.id_post)" :class="$style.card_comment_btn_send" >Publier</a>
-                </div>
+                <form :class="$style.card_comment_btn">
+                    <textarea :class="$style.card_comment_btn_write" id="texte" v-model="comment.texte"></textarea>
+                    <input type="submit" value="Publier" @click="create_commentaire($event, post.id_post)" :class="$style.card_comment_btn_send" >
+                </form>
             </div>
         </div>
     </div>
@@ -208,15 +214,24 @@ export default {
     flex-direction: column;
     width: min-content;
     row-gap: 30px;
+    padding-bottom: 20px;
 }
 
 .card{
-    border-radius: 3%;
-    background: linear-gradient(#f4f4f4, #e54b4b );
+    border-radius: 20px;
+    background: linear-gradient(#f4f4f4, #e54b4b);
     box-shadow: 0px 0px 0px 1px #000000;
     padding: 10px 0px;
     z-index: 3;
     width: 600px;
+
+    @media screen and (max-width: 610px) {
+            width: 500px;
+        }
+    @media screen and(max-width: 510px) {
+        width: 300px;
+    }
+
     &_content{
         z-index: 1;
 
@@ -227,15 +242,20 @@ export default {
             flex-direction: column;
             row-gap: 30px;
             padding-left: 20px;
-
+            width: 90%;
+            word-break: break-all;
             &_titre{
-                width: 250px;
-                word-wrap: break-word;
+
+                @media screen and(max-width: 510px) {
+                    font-size: 14px;
+                }
             }
 
             &_texte{
-                word-wrap: break-word;
-                width: 90%;
+
+                @media screen and(max-width: 510px) {
+                    font-size: 10px;
+                }
 
             }
 
@@ -245,11 +265,18 @@ export default {
 
     &_picture{
         width: 100%;
-        height: 300px;
+        height: 400px;
         object-fit: cover;
+
+        @media screen and (max-width: 610px) {
+            height: 338px;
+        }
+        @media screen and (max-width: 510px) {
+            height: 200px;
+        }
     }
 
-    &_user_1{
+    &_user_1, &_user_2{
         display: flex;
         align-items: center;
         column-gap: 20px;
@@ -258,23 +285,12 @@ export default {
         position: relative;
         bottom: 20px;
 
-        img{
-            height: 50px;
-            width: 50px;
-            border-radius: 50%;
-            border: 1px solid;
-            object-fit: cover;
+        h1{
+
+            @media screen and (max-width: 510px) {
+                font-size: 17px;
+            }
         }
-    }
-    &_user_2{
-        display: flex;
-        align-items: center;
-        column-gap: 20px;
-        border-bottom: 0px;
-        padding: 0px 10px;
-        position: relative;
-        bottom: 0px;
-        margin-bottom: 10px;
 
         img{
             height: 50px;
@@ -282,16 +298,25 @@ export default {
             border-radius: 50%;
             border: 1px solid;
             object-fit: cover;
+
+            @media screen and (max-width: 510px) {
+                height: 35px;
+                width: 35px;
+            }
         }
+    }
+    &_user_2{
+        margin-bottom: 10px;
+        bottom: 0px;
     }
     &_emoji{
 
         display: flex;
         column-gap: 20px;
         position: relative;
-        left: 20px;
+        left: 10px;
         width: min-content;
-        margin-bottom: 20px;
+        margin: 10px 0px;
 
         &_like{
             display: flex;
@@ -301,6 +326,10 @@ export default {
             border: 0px;
             padding: 4px 5px;
             border-radius: 50px;
+
+            @media screen and(max-width: 510px) {
+                font-size: 15px;
+            }
         }
         &_dislike{
             display: flex;
@@ -311,6 +340,10 @@ export default {
             border: 0px;
             padding: 4px 5px;
             border-radius: 50px;
+
+            @media screen and(max-width: 510px) {
+                font-size: 15px;
+            }
         }
 
     }
@@ -339,6 +372,7 @@ export default {
                     justify-content: left;
                     column-gap: 5px;
                     border-radius: 20px;
+                    font-size: 13px;
                     
                     img{
                         border-radius: 50%;
@@ -357,12 +391,22 @@ export default {
                     margin-left: 60px;
                     padding: 5px;
 
+                    @media screen and (max-width: 510px) {
+                        margin-left: 30px;
+                        font-size: 10px;
+                    }
+
                     &_delete{
                         cursor: pointer;
                         position: relative;
                         left: 85%;
                         bottom: 40px;
                         width: min-content;
+
+                        @media screen and (max-width: 510px) {
+                            left: 80%;
+                            font-size: 11px;
+                        }
                     }
                     
                 }
@@ -379,25 +423,29 @@ export default {
 
         &_btn{
             display: flex;
-            text-align: center;
+            flex-direction: column;
             align-items: center;
             border: 1px solid;
             border-radius: 20px;
-            height: 40px;
             margin: 0px 5px;
             background-color: #909cc2;
+            height: max-content;
+            row-gap: 5px;
             &_write{
-                height: 100%;
-                width: 90%;
-                border-radius: 20px 0px 0px 20px;
+                height: 150px;
+                width: 100%;
+                resize: none;
+                border-radius: 20px 20px 0px 0px;
                 border: 0px;
-                border-right: 1px solid;
-                padding: 0px 0px 0px 10px;
-                
+                padding: 10px;
             }
             &_send{
                 cursor: pointer;
-                width: 20%;
+                height: 40px;
+                width: 100%;
+                border-radius: 0px 0px 25px 25px;
+                border: none;
+                background-color: #909cc2;
             }
         }
     }
@@ -408,6 +456,11 @@ export default {
    left: 95%;
    font-size: 30px;
    z-index: 3;
+   width: max-content;
+
+   @media screen and (max-width: 510px) {
+        font-size: 20px;
+    }
 
    &_modif_delete{
        display: flex;
@@ -418,8 +471,17 @@ export default {
         font-size: 15px;
         z-index: 4;
 
+        @media screen and (max-width: 510px) {
+            font-size: 10px;
+            bottom: 25px;
+        }
+
         &_image{
             font-size: 10px;
+
+            @media screen and (max-width: 510px) {
+                font-size: 5px;
+            }
         }
 
    }

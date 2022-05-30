@@ -18,7 +18,7 @@ export default {
 
 .login{
   position: relative;
-  top: 100px;
+  margin-top: 70px;
   left: 50%;
 }
   

@@ -21,13 +21,13 @@
                 
                 <img :src="picture" alt="photo de profile" :class="$style.card_picture">
 
-                <div>
+                <div :class="$style.card_emoji">
 
-                    <button type="input" name="like">
+                    <button :class="$style.card_emoji_like" type="input" name="like">
                         <font-awesome-icon icon="thumbs-up" />   2
                     </button>
 
-                    <button type="input" name="dislike">
+                    <button :class="$style.card_emoji_dislike" type="input" name="dislike">
                         <font-awesome-icon icon="thumbs-down" />    1
                     </button>
 
@@ -79,11 +79,15 @@ export default {
 
 .card{
     border-radius: 3%;
-    background: linear-gradient(#909cc27e, #e54b4b7d );
+    background: linear-gradient(#f4f4f4, #e54b4b );
     box-shadow: 5px 6px 10px 0px #000000;
     padding: 10px 0px;
     z-index: 3;
     width: 500px;
+
+    @media screen and(max-width: 510px) {
+        width: 300px;
+    }
 
     &_content{
         z-index: 1;
@@ -99,11 +103,19 @@ export default {
             &_titre{
                 width: 250px;
                 word-wrap: break-word;
+
+                @media screen and(max-width: 510px) {
+                    font-size: 17px;
+                }
             }
 
             &_texte{
                 word-wrap: break-word;
                 width: 90%;
+
+                @media screen and(max-width: 510px) {
+                    font-size: 13px;
+                }
 
             }
 
@@ -115,6 +127,10 @@ export default {
         width: 100%;
         height: 300px;
         object-fit: cover;
+
+        @media screen and (max-width: 510px) {
+            height: 150px;
+        }
     }
 
     &_user{
@@ -126,12 +142,57 @@ export default {
         position: relative;
         bottom: 20px;
 
+        h1{
+
+            @media screen and (max-width: 510px) {
+                font-size: 20px;
+            }
+        }
+
         img{
             width: 50px;
             border-radius: 50%;
             border: 1px solid;
             object-fit: cover;
             height: 50px;
+        }
+    }
+
+    &_emoji{
+
+        display: flex;
+        column-gap: 20px;
+        position: relative;
+        left: 20px;
+        width: min-content;
+        margin-bottom: 20px;
+
+        &_like{
+            display: flex;
+            column-gap: 7px;
+            font-size: 20px;
+            background-color: white;
+            border: 0px;
+            padding: 4px 5px;
+            border-radius: 50px;
+
+            @media screen and (max-width: 610px) {
+                font-size: 15px;
+            }
+        }
+        &_dislike{
+            display: flex;
+            align-items: center;
+            column-gap: 7px;
+            font-size: 20px;
+            background-color: white;
+            border: 0px;
+            padding: 4px 5px;
+            border-radius: 50px;
+
+            @media screen and (max-width: 610px) {
+                font-size: 15px;
+            }
         }
     }
 
@@ -165,6 +226,11 @@ export default {
                         height: 40px;
                         width: 40px;
                         object-fit: cover;
+
+                        @media screen and (max-width: 510px) {
+                            height: 35px;
+                            width: 35px;
+                        }
                     }
                 }
 
@@ -214,6 +280,10 @@ export default {
    z-index: 3;
    width: min-content;
 
+   @media screen and (max-width: 510px) {
+        font-size: 20px;
+    }
+
    &_modif_delete{
        display: flex;
        column-gap: 20px;
@@ -223,9 +293,18 @@ export default {
         font-size: 15px;
         z-index: 4;
 
+        @media screen and (max-width: 510px) {
+            font-size: 10px;
+            bottom: 25px;
+        }
+
         &_image{
             
             font-size: 10px;
+
+            @media screen and (max-width: 510px) {
+                font-size: 5px;
+            }
         }
 
    }

@@ -1,27 +1,25 @@
 <template>
-    <div :class="$style.div">
-    <form  :class="$style.form" id="editPost">
+    <form  :class="$style.form" id="editPost" @submit="verif($event)">
         <fieldset :class="$style.field">
             <legend :class="$style.field_titre" v-if="post_id">Modifié votre publication</legend>
             <legend :class="$style.field_titre" v-else>Créé votre poste</legend>
 
             <label for="titre">Titre</label>
-            <input :class="$style.field_btn" type="text" name="titre" :value="this.titre" >
+            <textarea :class="$style.field_btn"  name="titre" required="required" :value="this.titre" ></textarea>
 
             <label for="texte">Texte</label>
-            <input :class="$style.field_btn" type="text" name="texte" :value="this.texte" >
+            <textarea :class="$style.field_btn_texte" type="text" name="texte" required="required" :value="this.texte" ></textarea>
 
             <label for="picture">Image</label>
-            <label for="picture" :class="$style.picture_profile" id="label_picture" required>{{namefile}}</label>
-            <input :class="$style.field_btn_picture" type="file" id="picture" required  name="image" @change="getpicture()" v-if="post_id">
-            <input :class="$style.field_btn_picture" type="file" id="picture" required name="image"  @change="getpicture()" v-else>
+            <label for="picture" :class="$style.picture_profile" id="label_picture">{{namefile}}</label>
+            <input :class="$style.field_btn_picture" type="file" id="picture" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" name="image" @change="getpicture()" v-if="post_id">
+            <input :class="$style.field_btn_picture" type="file" id="picture" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" name="image"  @change="getpicture()" v-else>
             
-            <input :class="$style.field_send" type="submit" value="Mettre à jour" id="update" @click="update($event)" v-if="post_id">
-            <input :class="$style.field_send" type="submit" value="Créé le post" id="update" @click="create($event)" v-if="!post_id">
+            <input :class="$style.field_send" type="submit" value="Mettre à jour" id="update" v-if="post_id">
+            <input :class="$style.field_send" type="submit" value="Créé le post" id="create"  v-if="!post_id">
 
         </fieldset>
     </form>
-</div>
 </template>
 
 <script>
@@ -58,6 +56,15 @@ export default {
         }
     },
     methods:{
+
+        verif(event){
+            if(!this.post_id){
+                this.create(event);
+            }
+            else{
+                this.update(event);
+            }
+        },
         update(event){
             event.preventDefault();
             this.post_create = this.$route.params.id;
@@ -124,36 +131,8 @@ export default {
 </script>
 
 <style lang="scss" module>
-.div{
-    border-radius: 2%;
-    box-shadow: 1px 1px 5px 0px rgb(0, 0, 0);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: 20px;
-    width: 500px;
-    background: linear-gradient(#909cc2, #e54b4b );
-    padding: 20px 0px;
-
-    &_logo{
-        width : 600px;
-    }
-
-    &_login{
-        font-size: 18px;
-
-        &:hover{
-            color: #084887;
-        }
-    }
-}
 
 .form{
-    height: 90%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: 30px;
     
     label{
         font-size: 19px;
@@ -200,19 +179,44 @@ export default {
 
     &_btn{
         margin-bottom: 20px;
-        width: 200px;
-        height: 35px;
+        resize: none;
+        min-width: 400px;
+        min-height: 35px;
         padding: 10px;
         border: 0px;
         border-radius: 10px;
         box-shadow: 0px 0px 0px 1px rgba(1, 1, 1, 0.222);
         font-size: 17px;
+        
+
+        @media screen and (max-width: 510px) {
+            resize: none;
+            min-width: 250px;
+            min-height: 100px;
+        }
+
+        &_texte{
+            margin-bottom: 20px;
+            resize: none;
+            min-width: 400px;
+            min-height: 150px;
+            padding: 10px;
+            border: 0px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 0px 1px rgba(1, 1, 1, 0.222);
+            font-size: 17px;
+
+            @media screen and (max-width: 510px) {
+                min-width: 250px;
+                min-height: 300px;
+            }
+        }
         &:focus-visible{
             outline: none;
         }
     }
     &_btn_picture{
-        opacity: 0;
+        display: none;
         z-index: 0;
 
         &:focus-visible{

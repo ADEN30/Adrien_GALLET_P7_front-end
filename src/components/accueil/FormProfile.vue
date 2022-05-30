@@ -82,55 +82,40 @@ export default {
 
 <template>
 
-    <div :class="$style.div">
-    <form  :class="$style.form" id="update_profile">
-        <fieldset :class="$style.field" name="client">
-            <legend :class="$style.field_titre">Profil</legend>
+<form  :class="$style.form" id="update_profile" @submit="update($event)">
+    <fieldset :class="$style.field" name="client" form="update_profile">
+        <legend :class="$style.field_titre">Profil</legend>
 
-            <label for="email">Email</label>
-            <input :class="$style.field_btn" type="email" name="email" pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" :value="this.actuel_email" >
+        <label for="email">Email</label>
+        <input :class="$style.field_btn" type="email" name="email" required="required" pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" :value="this.actuel_email" >
 
-            <label for="name">Nom</label>
-            <input :class="$style.field_btn" type="text" name="name" required="true" :value="this.actuel_name" >
+        <label for="name">Nom</label>
+        <input :class="$style.field_btn" type="text" name="name" required="required" pattern="^([A-Z][a-z]+([ ]?[a-z]?['-]?[A-Z][a-z]+)*)$" :value="this.actuel_name" >
 
-            <label for="firstname">Prénom</label>
-            <input :class="$style.field_btn" type="text" name="firstname" required="true" :value="this.actuel_firstname" >
+        <label for="firstname">Prénom</label>
+        <input :class="$style.field_btn" type="text" name="firstname" required="required" pattern="^([A-Z][a-z]+([ ]?[a-z]?['-]?[A-Z][a-z]+)*)$" :value="this.actuel_firstname" >
+    
+        <label for="picture">Photo de profil</label>
+        <label for="picture" :class="$style.picture_profile" id="label_picture">{{namefile}}</label>
+        <input :class="$style.field_btn_picture" type="file" id="picture" name="image" required="required" pattern="^.*\.(png|jpeg|jpg|gif)$" @change="this.file= true; getpicture() "> 
         
-            <label for="picture">Photo de profil</label>
-            <label for="picture" :class="$style.picture_profile" id="label_picture">{{namefile}}</label>
-            <input :class="$style.field_btn_picture" type="file" id="picture" name="image" required="true" @change="this.file= true; getpicture() "> 
-            
-            <input :class="$style.field_send" type="submit" value="Mettre à jour" @click="update($event)">
-            
-        </fieldset>
-    </form>
-</div>
+        <input :class="$style.field_send" type="submit" value="Mettre à jour">
+        
+    </fieldset>
+</form>
 </template>
 
 
 
 <style lang="scss" module>
 
-.div{
-    border-radius: 2%;
-    box-shadow: 1px 1px 5px 0px rgb(0, 0, 0);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: 20px;
-    width: 700px;
-    background: linear-gradient(#909cc2, #e54b4b );
-    padding: 20px 0px;
-}
 
 .form{
-    position: relative;
-    left: 10%;
-    height: 90%;
     display: flex;
     flex-direction: column;
     align-items: center;
     row-gap: 30px;
+    position: relative;
     
     label{
         font-size: 19px;
@@ -157,7 +142,6 @@ export default {
         overflow: hidden;
         text-overflow: ellipsis;
         z-index: 1;
-
         
     }
 }

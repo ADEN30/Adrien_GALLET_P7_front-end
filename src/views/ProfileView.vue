@@ -1,8 +1,10 @@
 <template>
 <NavBar/>
 <div :class="$style.box">
-    <img :class="$style.box_image" :src="this.picture" alt="">
-    <div>
+    <img :class="$style.box_image" :src="this.picture" alt="Photo de profil">
+    
+    <FormProfile :class="$style.box_form" :actuel_email="this.email" :actuel_name="this.name" :actuel_firstname="this.firstname" :actuel_picture="this.picture" @update-profile="update_picture" />
+    <div :class="$style.delete" >
         <div :class="$style.delete_texte"  v-if="this.droit == 1">
             <label for="user">Email du compte à supprimer</label>
             <input type="text" name="user" required :class="$style.delete_texte_btn">
@@ -10,8 +12,6 @@
         
         <input type="submit" name="delete" value="Supprimer le compte" @click="delete_accunt($event)" :class="$style.delete_btn">
     </div>
-    
-    <FormProfile :class="$style.box_form" :actuel_email="this.email" :actuel_name="this.name" :actuel_firstname="this.firstname" :actuel_picture="this.picture" @update-profile="update_picture" />
 </div>
 </template>
 
@@ -76,47 +76,80 @@ export default {
 
 <style lang="scss" module>
 .box{
+    border-radius: 2%;
+    box-shadow: 1px 1px 5px 0px rgb(0, 0, 0);
+    background: linear-gradient(#909cc2, #e54b4b );
     position: relative;
+    top: 10%;
     left: 50%;
     transform: translateX(-50%);
-    width: min-content;
+    row-gap: 20px;
+    width: 700px;
+    display: flex;
+    padding: 20px 0px;
+    column-gap: 20px;
+
+    @media screen and (max-width: 710px) {
+        flex-direction: column;
+        align-items: center;
+        width: 400px;
+        height: auto;
+        
+    }
+    @media screen and (max-width: 410px) {
+        width: 300px;
+        
+    }
     &_image{
         position: relative;
-        top: 250px;
+        top: 20px;
         left: 20px;
         width: 200px;
         height: 200px;
         object-fit: cover;
         border-radius: 50%;
         z-index: 2;
+
+        @media screen and (max-width: 710px) {
+            position: initial;
+        }
     }
 }
 
-.delete_btn{
+.delete{
     position: absolute;
-    cursor: pointer;
-    bottom: 5.3%;
+    bottom: 35px;
     left: 5%;
-    width: 130px;
-    height: 40px;
-    border-radius: 10px;
-    background-color: #ff253a;
-    border: 0px;
-    transform: scale(1);
-}
-.delete_texte{
-    position: absolute;
-    bottom: 12%;
-    left: 5%;
-    width: min-content;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    align-items: center;
+
     &_btn{
-        padding: 5px;
-        margin-top: 5px;
-        width: 190px;
-        height: 25px;
+        cursor: pointer;
+        width: 130px;
+        height: 40px;
         border-radius: 10px;
+        background-color: #ff253a;
         border: 0px;
         transform: scale(1);
     }
+    &_texte{
+        width: min-content;
+
+        &_btn{
+            padding: 5px;
+            margin-top: 5px;
+            width: 190px;
+            height: 25px;
+            border-radius: 10px;
+            border: 0px;
+            transform: scale(1);
+        }
+    }
+    @media screen and (max-width: 710px) {
+        position: initial;
+    }
 }
+
 </style>

@@ -1,22 +1,22 @@
 
 <script>
 import axiosCLI from "../axios/index";
-/* import io from 'socket.io-client'; */
+import io from 'socket.io-client';
 
 export default {
     name: "LoginVue",
     data(){
         return {
-            email: " ",
+            email: "",
             password:"",
-            /* socket: io("http://localhost:3000/") */
+            socket: io("http://localhost:3030/")
         }
     },
-    /* beforeUDestroy() {
+    beforeUDestroy() {
             this.socket.on("connect", (socket)=>{
                         console.log(socket.id);
                     })
-    }, */
+    },
     components:{
     },
     methods:{
@@ -31,7 +31,7 @@ export default {
                     this.$router.replace({path: '/posts'});
                     
                 })
-                .catch(err => console.log(err));
+                .catch(() => alert("L'adresse email rt/ou le mot de passe est invalide"));
                 
         }
     }
@@ -43,20 +43,19 @@ export default {
 <template>
 <div :class="$style.div">
     <img src="../assets/Groupomania_Logos/icon.svg" alt="logo groupomania" :class="$style.div_logo">
-    <form  :class="$style.form">
-        <fieldset :class="$style.field">
+    <form  :class="$style.form" id="login" @submit="send($event)">
+        <fieldset :class="$style.field" form="login">
             <legend :class="$style.field_titre">Connectez-vous</legend>
 
             <label for="email">Email</label>
-            <input :class="$style.field_btn" type="email" name="email" required="true" autocomplete="email" v-model="email" >
+            <input :class="$style.field_btn"  type="email" name="email" required="required" pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" autocomplete="email" v-model="email" >
         
         
             <label for="password">Mot de passe</label>
-            <input :class="$style.field_btn" type="password" id="password" required="true" v-model="password"> 
-            
-            <input :class="$style.field_send" type="submit" id="envoi_login" @click="send($event)" value="Se connecter">
-            
+            <input :class="$style.field_btn" type="password" id="password" required="required" v-model="password"> 
+            <input :class="$style.field_send" type="submit" id="envoi_login" value="Se connecter">
         </fieldset>
+        
     </form>
     <router-link :class="$style.div_singup" to="singup"> Créez un compte</router-link>
     <router-view/>
@@ -78,6 +77,10 @@ export default {
     height: 600px;
     transform: translate(-50%);
     background: linear-gradient(#909cc2, #e54b4b );
+
+    @media screen and (max-width: 510px) {
+        width: 300px;
+    }
 
     &_logo{
         width : 200px;

@@ -1,7 +1,7 @@
 
 <script>
 import axiosCLI from "../axios/index";
-import io from 'socket.io-client';
+/* import io from 'socket.io-client'; */
 
 export default {
     name: "LoginVue",
@@ -9,13 +9,13 @@ export default {
         return {
             email: "",
             password:"",
-            socket: io("http://localhost:3030/")
+            /* socket: io("http://localhost:3030/") */
         }
     },
     beforeUDestroy() {
-            this.socket.on("connect", (socket)=>{
+            /* this.socket.on("connect", (socket)=>{
                         console.log(socket.id);
-                    })
+                    }) */
     },
     components:{
     },
@@ -31,7 +31,9 @@ export default {
                     this.$router.replace({path: '/posts'});
                     
                 })
-                .catch(() => alert("L'adresse email rt/ou le mot de passe est invalide"));
+                .catch((err) => {
+                    alert("L'adresse email et/ou le mot de passe est invalide")
+                    console.log(err)});
                 
         }
     }
@@ -48,7 +50,7 @@ export default {
             <legend :class="$style.field_titre">Connectez-vous</legend>
 
             <label for="email">Email</label>
-            <input :class="$style.field_btn"  type="email" name="email" required="required" pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" autocomplete="email" v-model="email" >
+            <input :class="$style.field_btn"  type="email" name="email" required="required" autocomplete="email" v-model="email" >
         
         
             <label for="password">Mot de passe</label>

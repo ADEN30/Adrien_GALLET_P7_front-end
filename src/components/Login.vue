@@ -50,11 +50,11 @@ export default {
             <legend :class="$style.field_titre">Connectez-vous</legend>
 
             <label for="email">Email</label>
-            <input :class="$style.field_btn"  type="email" name="email" required="required" autocomplete="email" v-model="email" >
+            <input :class="$style.field_btn"  type="email" name="email" required="required" pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" autocomplete="email" v-model="email" >
         
         
             <label for="password">Mot de passe</label>
-            <input :class="$style.field_btn" type="password" id="password" required="required" v-model="password"> 
+            <input :class="$style.field_btn" type="password" id="password" required="required"  pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" v-model="password"> 
             <input :class="$style.field_send" type="submit" id="envoi_login" value="Se connecter">
         </fieldset>
         

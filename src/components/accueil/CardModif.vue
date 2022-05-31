@@ -165,7 +165,7 @@ export default {
         position: relative;
         left: 20px;
         width: min-content;
-        margin-bottom: 20px;
+        margin: 10px 0px;
 
         &_like{
             display: flex;

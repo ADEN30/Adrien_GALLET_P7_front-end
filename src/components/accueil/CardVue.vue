@@ -221,7 +221,7 @@ export default {
                         <div :class="$style.card_comment_liste_ligne_user" >
                             <img :src="commentaire.picture" alt="image du créateur du commentaire"> <p >{{commentaire.firstname}} {{commentaire.name}} </p>
                         </div> 
-                        <div :class="$style.card_comment_liste_ligne_comment_delete" @click="delete_comment(commentaire.id_comment, index, post.id_post)" v-if="post.user_build.uerid_post == commentaire.id_comment">Supprimer</div>
+                        <div :class="$style.card_comment_liste_ligne_comment_delete" @click="delete_comment(commentaire.id_comment, index, post.id_post)" v-if="this.user.userId == commentaire.id_comment || this.user.droit == 1">Supprimer</div>
                         <p :class="$style.card_comment_liste_ligne_comment">{{commentaire.comment}}</p>
                     </li>
                 </ul>
